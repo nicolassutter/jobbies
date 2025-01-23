@@ -12,6 +12,7 @@ import { Input } from "./ui/input";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,13 +26,20 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Textarea } from "./ui/textarea";
+import { ButtonLoader } from "./Loaders";
+import { useState } from "react";
 
 export const ApplicationCreationModal = () => {
   const form = useForm<Application>({
     resolver: zodResolver(ApplicationSchema),
-    defaultValues: {},
+    defaultValues: {
+      job_title: "",
+    },
   });
   const queryClient = useQueryClient();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const createMutation = useMutation({
     mutationFn: (application: Application) => {
@@ -41,16 +49,17 @@ export const ApplicationCreationModal = () => {
       queryClient.invalidateQueries({
         queryKey: ["applications"],
       });
+      setIsModalOpen(false);
     },
   });
 
   return (
-    <Dialog>
+    <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DialogTrigger asChild>
         <Button>New application</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-full max-w-2xl">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit((values) =>
@@ -78,9 +87,35 @@ export const ApplicationCreationModal = () => {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notes about application</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Honesly, I'm not sure if I want this job."
+                        rows={10}
+                        maxLength={1000}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      You can use Makdown here if you wish.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
+
             <DialogFooter>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit">
+                Save changes
+                {createMutation.isPending && <ButtonLoader />}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

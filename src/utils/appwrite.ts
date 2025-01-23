@@ -21,7 +21,7 @@ export const account = new Account(client);
 const databases = new Databases(client);
 
 export const ApplicationSchema = z.object({
-  job_title: z.string(),
+  job_title: z.string().min(1),
   notes: z.string().optional(),
   application_status: z
     .enum([
@@ -35,7 +35,7 @@ export const ApplicationSchema = z.object({
       "archived",
     ])
     .optional(),
-  url: z.string().optional(),
+  url: z.string().url().optional(),
 });
 export type Application = z.infer<typeof ApplicationSchema>;
 

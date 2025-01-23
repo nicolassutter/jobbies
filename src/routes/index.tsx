@@ -33,18 +33,22 @@ function HomeComponent() {
 
   return (
     <>
-      <Button
-        onClick={() => {
-          logout.mutate();
-        }}
-      >
-        Logout
-      </Button>
+      <div className="grid justify-start gap-2">
+        <Button
+          variant="outline"
+          onClick={() => {
+            logout.mutate();
+          }}
+        >
+          Logout
+        </Button>
 
-      <ApplicationCreationModal />
+        <ApplicationCreationModal />
 
-      <div className="grid gap-2 grid-cols-4">
-        {user ? "Logged in as" + user?.name : "no session"}
+        <h1 className="mt-6">Welcome {user?.name}</h1>
+      </div>
+
+      <div className="grid gap-2 grid-cols-4 mt-6">
         {applicationsQuery.data?.documents?.map((application) => (
           <Card key={application.$id}>
             <CardHeader>

@@ -20,6 +20,14 @@ import {
   getUserQueryData,
   userQueryOptions,
 } from "~/stores/session";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { ButtonLoader } from "~/components/Loaders";
 
 export const Route = createFileRoute("/login")({
   component: LoginComponent,
@@ -43,7 +51,10 @@ const schema = z.object({
 function LoginComponent() {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const queryClient = useQueryClient();
@@ -75,46 +86,51 @@ function LoginComponent() {
         onSubmit={form.handleSubmit((values) =>
           loginMutation.mutateAsync(values),
         )}
+        className="p-4 min-h-[100dvh] flex flex-col items-center justify-center"
       >
-        <div className="grid gap-4 py-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>E-mail</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <Card className="w-full max-w-[350px]">
+          <CardHeader>
+            <CardTitle>Sign-in to your account</CardTitle>
+          </CardHeader>
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+          <CardContent>
+            <div className="grid gap-4 py-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>E-mail</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <Button type="submit" disabled={loginMutation.isPending}>
-          Sign-in
-          {loginMutation.isPending && (
-            <>
-              <Loader2 className="animate-spin" />
-              <span className="sr-only">loading...</span>
-            </>
-          )}
-        </Button>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <Button type="submit" disabled={loginMutation.isPending}>
+              Sign-in
+              {loginMutation.isPending && <ButtonLoader />}
+            </Button>
+          </CardFooter>
+        </Card>
       </form>
     </Form>
   );

@@ -2,11 +2,7 @@ import { Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { createRootRouteWithContext } from "@tanstack/react-router";
 import { queryClient } from "~/utils/tanstack";
-import {
-  getUserQueryData,
-  sessionQueryOptions,
-  userQueryOptions,
-} from "~/stores/session";
+import { sessionQueryOptions, userQueryOptions } from "~/stores/session";
 
 interface MyRouterContext {}
 
