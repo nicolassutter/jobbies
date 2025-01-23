@@ -20,26 +20,26 @@ export const account = new Account(client);
 
 const databases = new Databases(client);
 
+export const applicationStatusEnum = z.enum([
+  "applied",
+  "interviewing",
+  "offered",
+  "rejected",
+  "accepted",
+  "declined",
+  "ghosted",
+  "archived",
+]);
+
 export const ApplicationSchema = z.object({
   job_title: z.string().min(1),
   notes: z.string().optional(),
-  application_status: z
-    .enum([
-      "applied",
-      "interviewing",
-      "offered",
-      "rejected",
-      "accepted",
-      "declined",
-      "ghosted",
-      "archived",
-    ])
-    .optional(),
+  application_status: applicationStatusEnum.optional(),
   url: z.string().url().optional(),
 });
 export type Application = z.infer<typeof ApplicationSchema>;
 
-interface ApplicationDocument
+export interface ApplicationDocument
   extends Models.Document,
     z.infer<typeof ApplicationSchema> {}
 
@@ -54,7 +54,7 @@ export async function createApplication(application: Application) {
   }
   const { userId } = session;
 
-  return databases.createDocument(
+  const doc: ApplicationDocument = await databases.createDocument(
     DATABASE_ID,
     APPLICATIONS_COLLECTION_ID,
     ID.unique(),
@@ -64,6 +64,16 @@ export async function createApplication(application: Application) {
       Permission.update(Role.user(userId)), // Only this user can update
       Permission.delete(Role.user(userId)), // Only this user can delete
     ],
+  );
+  return doc;
+}
+
+export async function updateApplication() {}
+export async function deleteApplication(id: string) {
+  return await databases.deleteDocument(
+    DATABASE_ID,
+    APPLICATIONS_COLLECTION_ID,
+    id,
   );
 }
 

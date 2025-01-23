@@ -1,16 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getApplications } from "../utils/appwrite";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
 import { ApplicationCreationModal } from "~/components/ApplicationCreationModal";
 import { useQuery } from "@tanstack/react-query";
-import { requireAuth, useLogout, useSession, useUser } from "~/stores/session";
-import { Button } from "~/components/ui/button";
+import { requireAuth, useSession, useUser } from "~/stores/session";
+import { TypographyH1 } from "~/components/Typography";
+import { Application } from "~/components/Application";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -22,7 +16,6 @@ export const Route = createFileRoute("/")({
 function HomeComponent() {
   const session = useSession()?.data;
   const user = useUser()?.data;
-  const logout = useLogout();
 
   const applicationsQuery = useQuery({
     queryKey: ["applications", session?.userId],
@@ -32,37 +25,19 @@ function HomeComponent() {
   });
 
   return (
-    <>
-      <div className="grid justify-start gap-2">
-        <Button
-          variant="outline"
-          onClick={() => {
-            logout.mutate();
-          }}
-        >
-          Logout
-        </Button>
-
+    <main className="p-4">
+      <div className="grid justify-start gap-2 pt-10">
         <ApplicationCreationModal />
-
-        <h1 className="mt-6">Welcome {user?.name}</h1>
+        <TypographyH1 className="mt-6">
+          <span>Welcome {user?.name}</span>
+        </TypographyH1>
       </div>
 
       <div className="grid gap-2 grid-cols-4 mt-6">
         {applicationsQuery.data?.documents?.map((application) => (
-          <Card key={application.$id}>
-            <CardHeader>
-              <CardTitle>{application.job_title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{application.notes}</p>
-            </CardContent>
-            <CardFooter>
-              <p>{application.application_status}</p>
-            </CardFooter>
-          </Card>
+          <Application key={application.$id} application={application} />
         ))}
       </div>
-    </>
+    </main>
   );
 }

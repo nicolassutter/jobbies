@@ -19,7 +19,15 @@ import {
   FormMessage,
 } from "./ui/form";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ApplicationSchema,
+  applicationStatusEnum,
   createApplication,
   type Application,
 } from "~/utils/appwrite";
@@ -28,7 +36,12 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "./ui/textarea";
 import { ButtonLoader } from "./Loaders";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { capitalize } from "~/lib/utils";
+
+const statuses = applicationStatusEnum._def.values
+  .toSorted((a, b) => a.localeCompare(b))
+  .map((status) => capitalize(status));
 
 export const ApplicationCreationModal = () => {
   const form = useForm<Application>({
@@ -41,12 +54,18 @@ export const ApplicationCreationModal = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isModalOpen) {
+      form.reset();
+    }
+  }, [isModalOpen]);
+
   const createMutation = useMutation({
     mutationFn: (application: Application) => {
       return createApplication(application);
     },
-    onSuccess() {
-      queryClient.invalidateQueries({
+    async onSuccess() {
+      await queryClient.invalidateQueries({
         queryKey: ["applications"],
       });
       setIsModalOpen(false);
@@ -90,6 +109,20 @@ export const ApplicationCreationModal = () => {
 
               <FormField
                 control={form.control}
+                name="url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Url to job post or company</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
@@ -105,6 +138,34 @@ export const ApplicationCreationModal = () => {
                     <FormDescription>
                       You can use Makdown here if you wish.
                     </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="application_status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Application status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a status for this application" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {statuses.map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {status}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

@@ -86,7 +86,7 @@ function LoginComponent() {
         onSubmit={form.handleSubmit((values) =>
           loginMutation.mutateAsync(values),
         )}
-        className="p-4 min-h-[100dvh] flex flex-col items-center justify-center"
+        className="p-4 min-h-[100dvh] flex flex-col items-center justify-center w-full"
       >
         <Card className="w-full max-w-[350px]">
           <CardHeader>
