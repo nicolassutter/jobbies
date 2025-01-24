@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getApplications } from "../utils/appwrite";
-import { ApplicationCreationModal } from "~/components/ApplicationCreationModal";
-import { useQuery } from "@tanstack/react-query";
-import { requireAuth, useSession, useUser } from "~/stores/session";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { requireAuth, useUser } from "~/stores/session";
 import { TypographyH1 } from "~/components/Typography";
 import { Application } from "~/components/Application";
+import { ApplicationDeletionModal } from "~/components/ApplicationDeletion";
+import { ApplicationEditionModal } from "~/components/ApplicationCreationModal";
+import { InferQueryFnType } from "~/types";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -13,27 +15,32 @@ export const Route = createFileRoute("/")({
   },
 });
 
-function HomeComponent() {
-  const session = useSession()?.data;
-  const user = useUser()?.data;
+const applicationsQueryOptions = queryOptions({
+  queryKey: ["applications"],
+  queryFn: () => {
+    return getApplications();
+  },
+});
+export type ApplicationsQueryReturn = InferQueryFnType<
+  typeof applicationsQueryOptions.queryFn
+>;
 
-  const applicationsQuery = useQuery({
-    queryKey: ["applications", session?.userId],
-    queryFn: () => {
-      return getApplications();
-    },
-  });
+function HomeComponent() {
+  const user = useUser()?.data;
+  const applicationsQuery = useQuery(applicationsQueryOptions);
 
   return (
-    <main className="p-4">
+    <main className="p-4 w-full">
       <div className="grid justify-start gap-2 pt-10">
-        <ApplicationCreationModal />
+        <ApplicationEditionModal trigger={true} />
+        <ApplicationDeletionModal />
+
         <TypographyH1 className="mt-6">
           <span>Welcome {user?.name}</span>
         </TypographyH1>
       </div>
 
-      <div className="grid gap-2 grid-cols-4 mt-6">
+      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mt-6">
         {applicationsQuery.data?.documents?.map((application) => (
           <Application key={application.$id} application={application} />
         ))}
