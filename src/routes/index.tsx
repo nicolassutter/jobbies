@@ -33,13 +33,16 @@ function HomeComponent() {
 
   return (
     <main className="p-4 w-full">
-      <div className="grid justify-start gap-2 pt-10">
-        <ApplicationEditionModal trigger={true} />
+      <div className="grid justify-start gap-4 pt-10">
         <ApplicationDeletionModal />
 
-        <TypographyH1 className="mt-6">
+        <TypographyH1>
           <span>Welcome {user?.name}</span>
         </TypographyH1>
+
+        <div className="flex">
+          <ApplicationEditionModal trigger={true} />
+        </div>
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mt-6">

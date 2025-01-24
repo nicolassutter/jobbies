@@ -8,39 +8,30 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { useLogout } from "~/stores/session";
+import { Link } from "@tanstack/react-router";
+
+type MenuItem = {
+  title: string;
+  icon: React.ComponentType;
+  url?: string;
+  onClick?: () => void;
+};
 
 export function AppSidebar() {
   const logout = useLogout();
-  const {} = useSidebar();
+  //const {} = useSidebar();
 
-  // Menu items.
-  const items = [
+  const items: MenuItem[] = [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: Home,
     },
     {
-      title: "Inbox",
-      url: "#",
-      icon: Inbox,
-    },
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
-    {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings,
     },
     {
@@ -56,16 +47,15 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="grow-0">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const Tag = item.url ? "a" : "button";
+                const Tag = item.url ? Link : "button";
 
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Tag href={item.url} onClick={item.onClick}>
+                      <Tag to={item.url} onClick={item.onClick}>
                         <item.icon />
                         <span>{item.title}</span>
                       </Tag>

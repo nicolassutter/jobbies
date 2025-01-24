@@ -45,6 +45,7 @@ import { combine } from "zustand/middleware";
 import { produce } from "immer";
 import { ApplicationsQueryReturn } from "~/routes";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { PlusCircle } from "lucide-react";
 
 const statuses = applicationStatusEnum._def.values
   .toSorted((a, b) => a.localeCompare(b))
@@ -179,7 +180,10 @@ export const ApplicationEditionModal: FunctionComponent<{
     >
       {props.trigger && (
         <DialogTrigger asChild>
-          <Button>New application</Button>
+          <Button>
+            <PlusCircle />
+            New application
+          </Button>
         </DialogTrigger>
       )}
 
