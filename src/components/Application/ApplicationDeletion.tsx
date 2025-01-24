@@ -8,28 +8,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteApplication } from "~/utils/appwrite";
-
 import { create } from "zustand";
-import { ButtonLoader } from "./Loaders";
+import { ButtonLoader } from "../Loaders";
 import { ApplicationsQueryReturn } from "~/routes";
 import { produce } from "immer";
+import { combine } from "zustand/middleware";
 
-type State = {
-  applicationId: string | null;
-  isModalOpen: boolean;
-  open: (id: string) => void;
-  close: () => void;
-};
-
-export const useApplicationDeletionModal = create<State>((set) => ({
-  applicationId: null as string | null,
-  isModalOpen: false,
-  open: (id) => set({ applicationId: id, isModalOpen: true }),
-  close: () => set({ applicationId: null, isModalOpen: false }),
-}));
+export const useApplicationDeletionModal = create(
+  combine(
+    {
+      applicationId: null as string | null,
+      isModalOpen: false,
+    },
+    (set) => ({
+      open: (id: string) => set({ applicationId: id, isModalOpen: true }),
+      close: () => set({ applicationId: null, isModalOpen: false }),
+    }),
+  ),
+);
 
 export const ApplicationDeletionModal: FunctionComponent<{}> = () => {
   const queryClient = useQueryClient();

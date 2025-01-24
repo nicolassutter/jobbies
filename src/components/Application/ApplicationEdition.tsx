@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,8 +7,8 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogHeader,
-} from "./ui/dialog";
-import { Input } from "./ui/input";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -17,7 +17,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
@@ -36,8 +36,8 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Textarea } from "./ui/textarea";
-import { ButtonLoader } from "./Loaders";
+import { Textarea } from "@/components/ui/textarea";
+import { ButtonLoader } from "../Loaders";
 import { FunctionComponent, useEffect, useRef } from "react";
 import { capitalize } from "~/lib/utils";
 import { create } from "zustand";

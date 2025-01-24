@@ -15,12 +15,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Edit, Edit2, Trash } from "lucide-react";
-import { useApplicationDeletionModal } from "./ApplicationDeletion";
-import { Badge } from "./ui/badge";
+import { Badge } from "@/components/ui/badge";
 import { capitalize } from "~/lib/utils";
-import { useApplicationEditionModal } from "./ApplicationCreationModal";
+import {
+  useApplicationEditionModal,
+  useApplicationDeletionModal,
+} from "@/components/Application/index";
 
 export const Application: FunctionComponent<{
   application: ApplicationDocument;

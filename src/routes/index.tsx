@@ -4,8 +4,10 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { requireAuth, useUser } from "~/stores/session";
 import { TypographyH1 } from "~/components/Typography";
 import { Application } from "~/components/Application";
-import { ApplicationDeletionModal } from "~/components/ApplicationDeletion";
-import { ApplicationEditionModal } from "~/components/ApplicationCreationModal";
+import {
+  ApplicationDeletionModal,
+  ApplicationEditionModal,
+} from "~/components/Application";
 import { InferQueryFnType } from "~/types";
 
 export const Route = createFileRoute("/")({
