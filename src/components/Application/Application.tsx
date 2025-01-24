@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useMemo } from "react";
 import { ApplicationDocument } from "~/utils/appwrite";
 import {
   DropdownMenu,
@@ -23,19 +23,34 @@ import {
   useApplicationEditionModal,
   useApplicationDeletionModal,
 } from "@/components/Application/index";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 
 export const Application: FunctionComponent<{
   application: ApplicationDocument;
 }> = ({ application }) => {
   const deletionModal = useApplicationDeletionModal();
   const editionModal = useApplicationEditionModal();
+  const notes = useMemo(
+    () =>
+      application.notes
+        ? DOMPurify.sanitize(
+            marked.parse(application.notes, {
+              async: false,
+            }),
+          )
+        : null,
+    [application.notes],
+  );
 
   return (
     <>
       <Card>
         <CardHeader>
           <div className="flex gap-2 justify-between">
-            <CardTitle>{application.job_title}</CardTitle>
+            <CardTitle>
+              <h2>{application.job_title}</h2>
+            </CardTitle>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -68,9 +83,16 @@ export const Application: FunctionComponent<{
             </DropdownMenu>
           </div>
         </CardHeader>
-        <CardContent>
-          <p>{application.notes}</p>
-        </CardContent>
+
+        {notes && (
+          <CardContent>
+            <div
+              className="prose"
+              dangerouslySetInnerHTML={{ __html: notes }}
+            ></div>
+          </CardContent>
+        )}
+
         {application.application_status && (
           <CardFooter>
             <Badge>{capitalize(application.application_status)}</Badge>

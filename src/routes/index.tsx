@@ -36,9 +36,7 @@ function HomeComponent() {
       <div className="grid justify-start gap-4 pt-10">
         <ApplicationDeletionModal />
 
-        <TypographyH1>
-          <span>Welcome {user?.name}</span>
-        </TypographyH1>
+        <h1 className="h1">Welcome {user?.name}</h1>
 
         <div className="flex">
           <ApplicationEditionModal trigger={true} />
