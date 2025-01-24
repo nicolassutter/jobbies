@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { getApplications } from "../utils/appwrite";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { requireAuth, useUser } from "~/stores/session";
-import { TypographyH1 } from "~/components/Typography";
 import { Application } from "~/components/Application";
 import {
   ApplicationDeletionModal,
