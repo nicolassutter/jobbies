@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteApplication } from "~/utils/appwrite";
 import { create } from "zustand";
 import { ButtonLoader } from "../Loaders";
-import { ApplicationsQueryReturn } from "~/routes";
+import { type ApplicationsQueryReturn } from "~/utils/queries";
 import { produce } from "immer";
 import { combine } from "zustand/middleware";
 

@@ -1,10 +1,9 @@
-import { Calendar, Home, Inbox, LogOut, Search, Settings } from "lucide-react";
+import { Home, LogOut, PieChart, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -21,13 +20,17 @@ type MenuItem = {
 
 export function AppSidebar() {
   const logout = useLogout();
-  //const {} = useSidebar();
 
   const items: MenuItem[] = [
     {
       title: "Home",
       url: "/",
       icon: Home,
+    },
+    {
+      title: "Stats",
+      url: "/stats",
+      icon: PieChart,
     },
     {
       title: "Settings",

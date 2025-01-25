@@ -23,8 +23,8 @@ import {
   useApplicationEditionModal,
   useApplicationDeletionModal,
 } from "@/components/Application/index";
-import { marked } from "marked";
 import DOMPurify from "dompurify";
+import { marked } from "~/utils/marked";
 
 export const Application: FunctionComponent<{
   application: ApplicationDocument;

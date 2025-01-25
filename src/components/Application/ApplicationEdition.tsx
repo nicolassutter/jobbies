@@ -28,8 +28,8 @@ import {
 import {
   ApplicationDocument,
   ApplicationSchema,
-  applicationStatusEnum,
   createApplication,
+  statuses,
   updateApplication,
   type Application,
 } from "~/utils/appwrite";
@@ -39,17 +39,12 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
 import { ButtonLoader } from "../Loaders";
 import { FunctionComponent, useEffect, useRef } from "react";
-import { capitalize } from "~/lib/utils";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 import { produce } from "immer";
-import { ApplicationsQueryReturn } from "~/routes";
+import { ApplicationsQueryReturn } from "~/utils/queries";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { PlusCircle } from "lucide-react";
-
-const statuses = applicationStatusEnum._def.values
-  .toSorted((a, b) => a.localeCompare(b))
-  .map((status) => capitalize(status));
 
 type Mode = "edition" | "creation";
 

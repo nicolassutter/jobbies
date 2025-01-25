@@ -1,13 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getApplications } from "../utils/appwrite";
-import { queryOptions, useQuery } from "@tanstack/react-query";
 import { requireAuth, useUser } from "~/stores/session";
 import { Application } from "~/components/Application";
 import {
   ApplicationDeletionModal,
   ApplicationEditionModal,
 } from "~/components/Application";
-import { InferQueryFnType } from "~/types";
+import { useApplicationsQuery } from "~/utils/queries";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -16,19 +14,9 @@ export const Route = createFileRoute("/")({
   },
 });
 
-const applicationsQueryOptions = queryOptions({
-  queryKey: ["applications"],
-  queryFn: () => {
-    return getApplications();
-  },
-});
-export type ApplicationsQueryReturn = InferQueryFnType<
-  typeof applicationsQueryOptions.queryFn
->;
-
 function HomeComponent() {
   const user = useUser()?.data;
-  const applicationsQuery = useQuery(applicationsQueryOptions);
+  const applicationsQuery = useApplicationsQuery();
 
   return (
     <main className="p-4 w-full">

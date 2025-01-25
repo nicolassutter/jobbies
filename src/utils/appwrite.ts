@@ -9,6 +9,7 @@ import {
   AppwriteException,
 } from "appwrite";
 import { z } from "zod";
+import { capitalize } from "~/lib/utils";
 
 export const client = new Client();
 
@@ -30,6 +31,11 @@ export const applicationStatusEnum = z.enum([
   "ghosted",
   "archived",
 ]);
+export type ApplicationStatus = z.infer<typeof applicationStatusEnum>;
+
+export const statuses = applicationStatusEnum._def.values
+  .toSorted((a, b) => a.localeCompare(b))
+  .map((status) => capitalize(status));
 
 export const ApplicationSchema = z.object({
   job_title: z.string().min(1),
