@@ -11,10 +11,14 @@ export const Route = createFileRoute("/stats")({
 
 function StatsComponent() {
   return (
-    <div className="w-full p-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 pt-10">
-      <div>
-        <ApplicationsByStatusChart />
+    <main role="main" className="p-4 pt-10">
+      <h1 className="h1">Your stats</h1>
+
+      <div className="w-full grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mt-6">
+        <div>
+          <ApplicationsByStatusChart />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
