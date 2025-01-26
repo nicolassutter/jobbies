@@ -6,7 +6,7 @@ import { sessionQueryOptions, userQueryOptions } from "~/stores/session";
 import { AppSidebar } from "~/components/AppSidebar";
 import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
 
-interface MyRouterContext {}
+type MyRouterContext = { [key: string]: never };
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async () => {

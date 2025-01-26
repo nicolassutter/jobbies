@@ -7,7 +7,6 @@ import {
   Role,
   type Models,
   AppwriteException,
-  Query,
 } from "appwrite";
 import { z } from "zod";
 import { capitalize } from "~/lib/utils";

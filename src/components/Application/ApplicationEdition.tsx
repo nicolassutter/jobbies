@@ -57,10 +57,10 @@ export const useApplicationEditionModal = create(
     },
     (set) => ({
       open: (mode: Mode, application?: ApplicationDocument) => {
-        return set((_state) => ({ application, mode, isOpen: true }));
+        return set(() => ({ application, mode, isOpen: true }));
       },
       close: () => {
-        return set((_state) => ({
+        return set(() => ({
           application: undefined,
           mode: "creation",
           isOpen: false,
@@ -197,7 +197,7 @@ export const ApplicationEditionModal: FunctionComponent<{
             <DialogHeader>
               <DialogTitle>New application</DialogTitle>
               <DialogDescription>
-                Provide some details about the job you're applying for.
+                Provide some details about the job you&apos;re applying for.
               </DialogDescription>
             </DialogHeader>
 

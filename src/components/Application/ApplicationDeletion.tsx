@@ -30,7 +30,7 @@ export const useApplicationDeletionModal = create(
   ),
 );
 
-export const ApplicationDeletionModal: FunctionComponent<{}> = () => {
+export const ApplicationDeletionModal: FunctionComponent = () => {
   const queryClient = useQueryClient();
 
   const { applicationId, isModalOpen, close } = useApplicationDeletionModal();
@@ -66,7 +66,7 @@ export const ApplicationDeletionModal: FunctionComponent<{}> = () => {
       open={isModalOpen}
       onOpenChange={(status) => {
         if (status) {
-          applicationId && open(applicationId);
+          if (applicationId) open(applicationId);
         } else {
           close();
         }
