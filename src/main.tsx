@@ -3,7 +3,6 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { queryClient } from "./utils/tanstack";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider } from "./components/ThemeProvider";
 import "./app.css";
 
 // Set up a Router instance
@@ -27,9 +26,7 @@ function InnerApp() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme={"system"} storageKey={"theme"}>
-        <InnerApp />
-      </ThemeProvider>
+      <InnerApp />
     </QueryClientProvider>
   );
 }

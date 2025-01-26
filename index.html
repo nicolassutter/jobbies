@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jobbies</title>
     <script type="module">
-      import { setupTheme } from "./src/utils/theme.ts";
-      setupTheme();
+      import { useTheme } from "./src/stores/theme.tsx";
+      useTheme.getState().init();
     </script>
   </head>
 
