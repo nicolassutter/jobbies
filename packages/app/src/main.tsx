@@ -4,6 +4,10 @@ import { routeTree } from "./routeTree.gen";
 import { queryClient } from "./utils/tanstack";
 import { QueryClientProvider } from "@tanstack/react-query";
 import "./app.css";
+import { trpc } from "./utils/trpc";
+import { useState } from "react";
+import { httpBatchLink } from "@trpc/client";
+import { trpcUrl } from "./utils/trpc.client";
 
 // Set up a Router instance
 const router = createRouter({
@@ -24,10 +28,26 @@ function InnerApp() {
 }
 
 function App() {
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: trpcUrl,
+          // You can pass any HTTP headers you wish here
+          async headers() {
+            return {};
+          },
+        }),
+      ],
+    }),
+  );
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <InnerApp />
-    </QueryClientProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <InnerApp />
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 }
 

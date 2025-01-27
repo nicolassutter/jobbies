@@ -21,7 +21,8 @@
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "@internal/server": "workspace:*"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -38,6 +39,8 @@
     "@tanstack/react-query": "^5.64.2",
     "@tanstack/react-router": "^1.97.14",
     "@tanstack/router-devtools": "^1.97.14",
+    "@trpc/client": "11.0.0-rc.730",
+    "@trpc/react-query": "11.0.0-rc.730",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dompurify": "^3.2.3",

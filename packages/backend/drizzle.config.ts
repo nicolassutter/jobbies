@@ -1,12 +1,12 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
-import { env } from "./env";
+import { env } from "./server/utils/env";
 
 const driver = env.DEV ? "pglite" : undefined;
 
 export default defineConfig({
   out: "./drizzle",
-  schema: "./src/db/schema.ts",
+  schema: "./server/db/schema.ts",
   dialect: "postgresql",
   ...(driver ? { driver } : {}),
   dbCredentials: {
