@@ -9,13 +9,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteApplication } from "~/utils/appwrite";
+import { useQueryClient } from "@tanstack/react-query";
 import { create } from "zustand";
 import { ButtonLoader } from "../Loaders";
-import { type ApplicationsQueryReturn } from "~/utils/queries";
 import { produce } from "immer";
 import { combine } from "zustand/middleware";
+import { trpc } from "~/utils/trpc.client";
 
 export const useApplicationDeletionModal = create(
   combine(
@@ -35,11 +34,7 @@ export const ApplicationDeletionModal: FunctionComponent = () => {
 
   const { applicationId, isModalOpen, close } = useApplicationDeletionModal();
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await deleteApplication(id);
-      return id;
-    },
+  const deleteMutation = trpc.applications.delete.useMutation({
     async onSuccess(deletedId) {
       // remove the deleted application from the cache
       queryClient.setQueryData(

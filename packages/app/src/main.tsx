@@ -7,7 +7,7 @@ import "./app.css";
 import { trpc } from "./utils/trpc";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
-import { trpcUrl } from "./utils/trpc.client";
+import { config } from "./utils/config";
 
 // Set up a Router instance
 const router = createRouter({
@@ -32,7 +32,7 @@ function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: trpcUrl,
+          url: config.trpcUrl,
           // You can pass any HTTP headers you wish here
           async headers() {
             return {};

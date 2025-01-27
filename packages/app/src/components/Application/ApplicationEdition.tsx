@@ -42,9 +42,9 @@ import { FunctionComponent, useEffect, useRef } from "react";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 import { produce } from "immer";
-import { ApplicationsQueryReturn } from "~/utils/queries";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { PlusCircle } from "lucide-react";
+import { trpc } from "~/utils/trpc.client";
 
 type Mode = "edition" | "creation";
 
@@ -96,14 +96,11 @@ export const ApplicationEditionModal: FunctionComponent<{
     form.reset(defaultValues);
   }, [modalState.isOpen]);
 
-  const createMutation = useMutation({
-    mutationFn: (application: Application) => {
-      return createApplication(application);
-    },
+  const utils = trpc.useUtils();
+
+  const createMutation = trpc.applications.create.useMutation({
     async onSuccess() {
-      await queryClient.invalidateQueries({
-        queryKey: ["applications"],
-      });
+      utils.applications.read.invalidate();
       modalState.close();
     },
   });

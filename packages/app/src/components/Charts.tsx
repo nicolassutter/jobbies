@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/chart";
 import { capitalize } from "~/lib/utils";
 import { useMemo } from "react";
-import { useApplicationsQuery } from "~/utils/queries";
+import { trpc } from "~/utils/trpc.client";
 
 export function ApplicationsByStatusChart() {
   const chartConfig = {
@@ -20,7 +20,7 @@ export function ApplicationsByStatusChart() {
 
   type DataItem = { status: string; count: number };
 
-  const applicationsQuery = useApplicationsQuery();
+  const applicationsQuery = trpc.applications.read.useQuery();
 
   const data = useMemo(() => {
     const groupedByStatus = Object.groupBy(

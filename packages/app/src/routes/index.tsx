@@ -5,7 +5,7 @@ import {
   ApplicationDeletionModal,
   ApplicationEditionModal,
 } from "~/components/Application";
-import { useApplicationsQuery } from "~/utils/queries";
+import { trpc } from "~/utils/trpc.client";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -16,7 +16,8 @@ export const Route = createFileRoute("/")({
 
 function HomeComponent() {
   const user = useUser()?.data;
-  const applicationsQuery = useApplicationsQuery();
+  const applicationsQuery = trpc.applications.read.useQuery();
+  const d = applicationsQuery.data;
 
   return (
     <main className="p-4 w-full">
