@@ -27,6 +27,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { ButtonLoader } from "~/components/Loaders";
+import { signIn } from "~/utils/auth-client";
 
 export const Route = createFileRoute("/login")({
   component: LoginComponent,
@@ -62,11 +63,18 @@ function LoginComponent() {
   const loginMutation = useMutation({
     mutationFn: async (data: z.infer<typeof schema>) => {
       const session = getSessionQueryData();
+
       if (session) {
         // already logged in
         return session;
       }
-      return login(data.email, data.password);
+
+      const result = signIn.email({
+        email: data.email,
+        password: data.password,
+      });
+
+      return result;
     },
     async onSuccess(session) {
       // update the query without refetching

@@ -1,7 +1,8 @@
-import { applications } from "../../db/schema";
+import { applications } from "~/db/schema";
 import { privateProcedure, router } from "..";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
+import { db } from "~/db";
 
 const applicationSchema = z
   .object({})

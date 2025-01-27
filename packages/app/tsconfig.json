@@ -15,5 +15,11 @@
         "./src/*"
       ]
     }
-  }
+  },
+  // FIXME: is this a good idea ? This fixes type inference for tRPC, we could also just remove path aliases and auto imports on the backend but for now it's nice to have.
+  "references": [
+    {
+      "path": "../backend"
+    }
+  ]
 }

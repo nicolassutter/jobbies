@@ -12,6 +12,11 @@
     "drizzle-kit": "^0.30.2",
     "nitropack": "latest"
   },
+  "exports": {
+    "./trpc": {
+      "import": "./server/trpc/routers/app.router.ts"
+    }
+  },
   "dependencies": {
     "@trpc/server": "11.0.0-rc.730",
     "better-auth": "^1.1.14",

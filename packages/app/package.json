@@ -22,7 +22,8 @@
     "tailwindcss": "^3.4.16",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "@internal/server": "workspace:*"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

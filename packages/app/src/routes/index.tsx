@@ -17,7 +17,6 @@ export const Route = createFileRoute("/")({
 function HomeComponent() {
   const user = useUser()?.data;
   const applicationsQuery = trpc.applications.read.useQuery();
-  const d = applicationsQuery.data;
 
   return (
     <main className="p-4 w-full">
@@ -32,8 +31,8 @@ function HomeComponent() {
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mt-6">
-        {applicationsQuery.data?.documents?.map((application) => (
-          <Application key={application.$id} application={application} />
+        {applicationsQuery.data?.map((application) => (
+          <Application key={application.id} application={application} />
         ))}
       </div>
     </main>
