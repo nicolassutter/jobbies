@@ -196,6 +196,9 @@ importers:
       drizzle-kit:
         specifier: ^0.30.2
         version: 0.30.3
+      h3:
+        specifier: ^1.14.0
+        version: 1.14.0
       nitropack:
         specifier: latest
         version: 2.10.4(@electric-sql/pglite@0.2.16)(drizzle-orm@0.38.4(@electric-sql/pglite@0.2.16)(@types/react@18.3.18)(kysely@0.27.5)(react@18.3.1))(typescript@5.7.3)
