@@ -1,17 +1,17 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const applicationStatusEnum = z.enum([
-  "applied",
-  "interviewing",
-  "offered",
-  "rejected",
-  "accepted",
-  "declined",
-  "ghosted",
-  "archived",
-]);
+  'applied',
+  'interviewing',
+  'offered',
+  'rejected',
+  'accepted',
+  'declined',
+  'ghosted',
+  'archived',
+])
 
-export type ApplicationStatus = z.infer<typeof applicationStatusEnum>;
+export type ApplicationStatus = z.infer<typeof applicationStatusEnum>
 
 export const ApplicationSchema = z.object({
   id: z.string(),
@@ -24,11 +24,11 @@ export const ApplicationSchema = z.object({
     // first validate that it is a string -> transform the value -> make sure that is a valid url if it's a string
     .string()
     .optional()
-    .transform((v) => (v === "" ? null : v))
+    .transform((v) => (v === '' ? null : v))
     .pipe(z.string().url().optional().nullable()),
-});
+})
 /**
  * The payload schema is used to validate the payload sent to the server.
  */
-export const ApplicationPayloadSchema = ApplicationSchema.omit({ id: true });
-export type Application = z.infer<typeof ApplicationSchema>;
+export const ApplicationPayloadSchema = ApplicationSchema.omit({ id: true })
+export type Application = z.infer<typeof ApplicationSchema>

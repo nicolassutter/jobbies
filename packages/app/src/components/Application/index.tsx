@@ -1,3 +1,3 @@
-export * from "./ApplicationDeletion";
-export * from "./ApplicationEdition";
-export * from "./Application";
+export * from './ApplicationDeletion'
+export * from './ApplicationEdition'
+export * from './Application'

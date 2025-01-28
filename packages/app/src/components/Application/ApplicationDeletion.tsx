@@ -1,4 +1,4 @@
-import { type FunctionComponent } from "react";
+import { type FunctionComponent } from 'react'
 import {
   Dialog,
   DialogClose,
@@ -7,12 +7,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { create } from "zustand";
-import { ButtonLoader } from "../Loaders";
-import { combine } from "zustand/middleware";
-import { trpc } from "~/utils/trpc.client";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { create } from 'zustand'
+import { ButtonLoader } from '../Loaders'
+import { combine } from 'zustand/middleware'
+import { trpc } from '~/utils/trpc.client'
 
 export const useApplicationDeletionModal = create(
   combine(
@@ -25,38 +25,38 @@ export const useApplicationDeletionModal = create(
       close: () => set({ applicationId: null, isModalOpen: false }),
     }),
   ),
-);
+)
 
 export const ApplicationDeletionModal: FunctionComponent = () => {
-  const utils = trpc.useUtils();
+  const utils = trpc.useUtils()
 
-  const { applicationId, isModalOpen, close } = useApplicationDeletionModal();
+  const { applicationId, isModalOpen, close } = useApplicationDeletionModal()
 
   const deleteMutation = trpc.applications.delete.useMutation({
     async onSuccess(_, deletedId) {
       // remove the deleted application from the cache
       utils.applications.read.setData(undefined, (cache) => {
-        if (!cache) return;
-        const newCache = cache?.filter((app) => app.id !== deletedId);
-        return newCache;
-      });
+        if (!cache) return
+        const newCache = cache?.filter((app) => app.id !== deletedId)
+        return newCache
+      })
 
-      close();
+      close()
     },
-  });
+  })
 
   return (
     <Dialog
       open={isModalOpen}
       onOpenChange={(status) => {
         if (status) {
-          if (applicationId) open(applicationId);
+          if (applicationId) open(applicationId)
         } else {
-          close();
+          close()
         }
       }}
     >
-      <DialogContent className="w-full max-w-lg">
+      <DialogContent className='w-full max-w-lg'>
         <DialogHeader>
           <DialogTitle>Delete application</DialogTitle>
           <DialogDescription>
@@ -66,14 +66,14 @@ export const ApplicationDeletionModal: FunctionComponent = () => {
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant='secondary'>Cancel</Button>
           </DialogClose>
           <Button
-            type="submit"
-            variant={"destructive"}
+            type='submit'
+            variant={'destructive'}
             onClick={() => {
               if (applicationId) {
-                deleteMutation.mutate(applicationId);
+                deleteMutation.mutate(applicationId)
               }
             }}
           >
@@ -83,5 +83,5 @@ export const ApplicationDeletionModal: FunctionComponent = () => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

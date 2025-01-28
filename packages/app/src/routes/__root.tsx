@@ -1,33 +1,33 @@
-import { Outlet, useLocation } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { createRootRouteWithContext } from "@tanstack/react-router";
-import { ensureUserQueryData } from "~/stores/session";
-import { AppSidebar } from "~/components/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
+import { Outlet, useLocation } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { createRootRouteWithContext } from '@tanstack/react-router'
+import { ensureUserQueryData } from '~/stores/session'
+import { AppSidebar } from '~/components/AppSidebar'
+import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 
-type MyRouterContext = { [key: string]: never };
+type MyRouterContext = { [key: string]: never }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   beforeLoad: async () => {
     // makes sure the user data (if any) is fetched before rendering the app
-    await ensureUserQueryData();
+    await ensureUserQueryData()
   },
   component: RootComponent,
-});
+})
 
 function RootComponent() {
-  const loc = useLocation();
-  const showSidebar = loc.pathname !== "/login";
+  const loc = useLocation()
+  const showSidebar = loc.pathname !== '/login'
 
   return (
     <>
-      <div className="flex">
+      <div className='flex'>
         {showSidebar && (
-          <div className="sidebar-container relative">
+          <div className='sidebar-container relative'>
             <SidebarProvider>
               <AppSidebar />
 
-              <div className="absolute left-full ml-2">
+              <div className='absolute left-full ml-2'>
                 <SidebarTrigger />
               </div>
             </SidebarProvider>
@@ -36,7 +36,7 @@ function RootComponent() {
 
         <Outlet />
       </div>
-      <TanStackRouterDevtools position="bottom-right" />
+      <TanStackRouterDevtools position='bottom-right' />
     </>
-  );
+  )
 }

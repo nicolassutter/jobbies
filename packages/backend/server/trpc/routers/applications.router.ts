@@ -1,28 +1,28 @@
-import { applications } from "../../db/schema";
-import { privateProcedure, router } from "..";
-import { and, eq } from "drizzle-orm";
-import { z } from "zod";
-import { db } from "../../db";
+import { applications } from '../../db/schema'
+import { privateProcedure, router } from '..'
+import { and, eq } from 'drizzle-orm'
+import { z } from 'zod'
+import { db } from '../../db'
 
 const applicationSchema = z
   .object({})
-  .transform((v) => v as typeof applications.$inferInsert);
+  .transform((v) => v as typeof applications.$inferInsert)
 
 export const applicationsRouter = router({
   create: privateProcedure.input(applicationSchema).mutation(({ input }) => {
-    const userId = "";
-    const inputWithUserId = { ...input, userId };
-    return db.insert(applications).values(inputWithUserId).returning();
+    const userId = ''
+    const inputWithUserId = { ...input, userId }
+    return db.insert(applications).values(inputWithUserId).returning()
   }),
   read: privateProcedure.query(async () => {
-    const userId = "";
+    const userId = ''
 
     const results = await db
       .select()
       .from(applications)
-      .where(eq(applications.userId, userId));
+      .where(eq(applications.userId, userId))
 
-    return results;
+    return results
   }),
   update: privateProcedure
     .input(
@@ -32,25 +32,25 @@ export const applicationsRouter = router({
       }),
     )
     .mutation(async ({ input }) => {
-      const userId = "";
+      const userId = ''
 
-      const { applicationId, applicationData } = input;
+      const { applicationId, applicationData } = input
 
       const isUserAllowed = and(
         eq(applications.userId, userId),
         eq(applications.id, applicationId),
-      );
+      )
 
       // since applications.id is unique, we can only have one result
       const [updatedApp] = await db
         .update(applications)
         .set(applicationData)
         .where(isUserAllowed)
-        .returning();
+        .returning()
 
-      return updatedApp;
+      return updatedApp
     }),
   delete: privateProcedure.input(z.string()).mutation(async ({ input: id }) => {
-    await db.delete(applications).where(eq(applications.id, id));
+    await db.delete(applications).where(eq(applications.id, id))
   }),
-});
+})

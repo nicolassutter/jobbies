@@ -1,30 +1,30 @@
-import ReactDOM from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
-import { queryClient } from "./utils/tanstack";
-import { QueryClientProvider } from "@tanstack/react-query";
-import "./app.css";
-import { useState } from "react";
-import { httpBatchLink } from "@trpc/client";
-import { config } from "./utils/config";
-import { trpc } from "./utils/trpc.client";
+import ReactDOM from 'react-dom/client'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { routeTree } from './routeTree.gen'
+import { queryClient } from './utils/tanstack'
+import { QueryClientProvider } from '@tanstack/react-query'
+import './app.css'
+import { useState } from 'react'
+import { httpBatchLink } from '@trpc/client'
+import { config } from './utils/config'
+import { trpc } from './utils/trpc.client'
 
 // Set up a Router instance
 const router = createRouter({
   routeTree,
-  defaultPreload: "intent",
+  defaultPreload: 'intent',
   context: {},
-});
+})
 
 // Register things for typesafety
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router;
+    router: typeof router
   }
 }
 
 function InnerApp() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />
 }
 
 function App() {
@@ -35,25 +35,28 @@ function App() {
           url: config.trpcUrl,
           // You can pass any HTTP headers you wish here
           async headers() {
-            return {};
+            return {}
           },
         }),
       ],
     }),
-  );
+  )
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+    <trpc.Provider
+      client={trpcClient}
+      queryClient={queryClient}
+    >
       <QueryClientProvider client={queryClient}>
         <InnerApp />
       </QueryClientProvider>
     </trpc.Provider>
-  );
+  )
 }
 
-const rootElement = document.getElementById("app")!;
+const rootElement = document.getElementById('app')!
 
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(<App />);
+  const root = ReactDOM.createRoot(rootElement)
+  root.render(<App />)
 }

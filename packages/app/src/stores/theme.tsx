@@ -1,30 +1,30 @@
-import { create } from "zustand";
-import { combine, persist, createJSONStorage } from "zustand/middleware";
+import { create } from 'zustand'
+import { combine, persist, createJSONStorage } from 'zustand/middleware'
 
-export type Theme = "dark" | "light" | "system";
-export const defaultTheme: Theme = "system";
+export type Theme = 'dark' | 'light' | 'system'
+export const defaultTheme: Theme = 'system'
 
 function setupTheme(theme?: Theme) {
   if (!theme) {
-    theme = useTheme.getState().theme;
+    theme = useTheme.getState().theme
   }
 
-  const root = window.document.documentElement;
+  const root = window.document.documentElement
 
-  root.classList.remove("light", "dark");
+  root.classList.remove('light', 'dark')
 
-  if (theme === "system") {
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+  if (theme === 'system') {
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
       .matches
-      ? "dark"
-      : "light";
+      ? 'dark'
+      : 'light'
 
-    root.classList.add(systemTheme);
-    return;
+    root.classList.add(systemTheme)
+    return
   }
 
-  root.classList.add(theme);
-  return;
+  root.classList.add(theme)
+  return
 }
 
 const useTheme = create(
@@ -35,8 +35,8 @@ const useTheme = create(
       },
       (set) => ({
         setTheme: (theme: Theme) => {
-          set({ theme });
-          setupTheme(theme);
+          set({ theme })
+          setupTheme(theme)
         },
         /**
          * Empty function that is called to create the store in the page head,
@@ -46,7 +46,7 @@ const useTheme = create(
       }),
     ),
     {
-      name: "theme-storage",
+      name: 'theme-storage',
       storage: createJSONStorage(() => localStorage),
       onRehydrateStorage: () => {
         // before  hydration
@@ -54,11 +54,11 @@ const useTheme = create(
         return (state) => {
           // after hydration
           // initial setup for the theme
-          setupTheme(state?.theme);
-        };
+          setupTheme(state?.theme)
+        }
       },
     },
   ),
-);
+)
 
-export { useTheme };
+export { useTheme }

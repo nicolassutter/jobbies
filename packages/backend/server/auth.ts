@@ -1,10 +1,10 @@
-import { APIError, betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "./db";
+import { APIError, betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { db } from './db'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "pg", // or "mysql", "sqlite"
+    provider: 'pg', // or "mysql", "sqlite"
   }),
   emailAndPassword: {
     enabled: true,
@@ -13,9 +13,9 @@ export const auth = betterAuth({
   },
   emailVerification: {
     sendVerificationEmail: async () => {
-      throw new APIError("FORBIDDEN", {
-        message: "Email verification is disabled",
-      });
+      throw new APIError('FORBIDDEN', {
+        message: 'Email verification is disabled',
+      })
     },
   },
-});
+})

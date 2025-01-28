@@ -9,12 +9,8 @@
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
     "paths": {
-      "~/*": [
-        "./src/*"
-      ],
-      "@/*": [
-        "./src/*"
-      ]
+      "~/*": ["./src/*"],
+      "@/*": ["./src/*"]
     }
   }
 }

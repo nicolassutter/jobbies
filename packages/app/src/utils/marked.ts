@@ -1,13 +1,13 @@
-import { marked, Renderer } from "marked";
+import { marked, Renderer } from 'marked'
 
-const renderer = new Renderer();
+const renderer = new Renderer()
 
 marked.use({
   renderer: {
     table(...args) {
-      return `<div class='w-full overflow-auto'>${renderer.table.apply(this, args)}</div>`;
+      return `<div class='w-full overflow-auto'>${renderer.table.apply(this, args)}</div>`
     },
   },
-});
+})
 
-export { marked };
+export { marked }
