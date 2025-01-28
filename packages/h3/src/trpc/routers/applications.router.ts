@@ -8,24 +8,23 @@ import { ApplicationPayloadSchema } from '@internal/shared'
 export const applicationsRouter = router({
   create: privateProcedure
     .input(ApplicationPayloadSchema)
-    .mutation(({ input }) => {
-      const userId = ''
+    .mutation(({ input, ctx: { user } }) => {
       const inputWithUserId: typeof applications.$inferInsert = {
         ...input,
-        userId,
+        userId: user.id,
       }
       return db.insert(applications).values(inputWithUserId).returning()
     }),
-  read: privateProcedure.query(async () => {
-    const userId = ''
 
+  read: privateProcedure.query(async ({ ctx: { user } }) => {
     const results = await db
       .select()
       .from(applications)
-      .where(eq(applications.userId, userId))
+      .where(eq(applications.userId, user.id))
 
     return results
   }),
+
   update: privateProcedure
     .input(
       z.object({
@@ -33,13 +32,11 @@ export const applicationsRouter = router({
         applicationData: ApplicationPayloadSchema,
       }),
     )
-    .mutation(async ({ input }) => {
-      const userId = ''
-
+    .mutation(async ({ input, ctx: { user } }) => {
       const { applicationId, applicationData } = input
 
       const isUserAllowed = and(
-        eq(applications.userId, userId),
+        eq(applications.userId, user.id),
         eq(applications.id, applicationId),
       )
 
@@ -52,7 +49,15 @@ export const applicationsRouter = router({
 
       return updatedApp
     }),
-  delete: privateProcedure.input(z.string()).mutation(async ({ input: id }) => {
-    await db.delete(applications).where(eq(applications.id, id))
-  }),
+
+  delete: privateProcedure
+    .input(z.string())
+    .mutation(async ({ input: id, ctx: { user } }) => {
+      const isUserAllowed = and(
+        eq(applications.userId, user.id),
+        eq(applications.id, id),
+      )
+
+      await db.delete(applications).where(isUserAllowed)
+    }),
 })

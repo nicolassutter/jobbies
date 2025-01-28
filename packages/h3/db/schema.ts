@@ -14,7 +14,7 @@ export const applications = pgTable('applications', {
   id: uuid().primaryKey().defaultRandom(),
   jobTitle: varchar('job_title', { length: 255 }).notNull(),
   notes: text(),
-  application_status: varchar({
+  applicationStatus: varchar('application_status', {
     length: 255,
     enum: applicationStatusEnum._def.values,
   }),

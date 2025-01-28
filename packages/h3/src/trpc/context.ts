@@ -1,9 +1,17 @@
 import { type FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
-export function createContext({
+import { auth } from '../auth'
+
+export async function createContext({
   req,
   resHeaders,
 }: FetchCreateContextFnOptions) {
-  //const user = { name: req.headers.get("username") ?? "anonymous" };
-  return { req, resHeaders }
+  const sessionData = await auth.api.getSession({
+    headers: req.headers,
+  })
+
+  const { user, session } = sessionData ?? {}
+
+  return { req, resHeaders, user, session }
 }
+
 export type Context = Awaited<ReturnType<typeof createContext>>
