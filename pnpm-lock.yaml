@@ -177,9 +177,6 @@ importers:
 
   packages/h3:
     dependencies:
-      '@electric-sql/pglite':
-        specifier: ^0.2.16
-        version: 0.2.16
       '@internal/shared':
         specifier: workspace:*
         version: link:../shared
@@ -7749,7 +7746,8 @@ snapshots:
 
   '@drizzle-team/brocli@0.10.2': {}
 
-  '@electric-sql/pglite@0.2.16': {}
+  '@electric-sql/pglite@0.2.16':
+    optional: true
 
   '@esbuild-kit/core-utils@3.3.2':
     dependencies:

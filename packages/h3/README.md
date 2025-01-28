@@ -9,7 +9,7 @@ For production, `src/index.ts` is bundled with `tsup` to avoid any weird TS beha
 ## Database
 
 - We use a self hosted postgres instance on Railway
-- In development we actually use pglite which uses WASM to start a local postgres env
+- In development we use Docker to spin up a postgres db
 
 ## Netlify
 

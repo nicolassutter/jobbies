@@ -24,7 +24,6 @@
     }
   },
   "dependencies": {
-    "@electric-sql/pglite": "^0.2.16",
     "@internal/shared": "workspace:*",
     "@netlify/functions": "^3.0.0",
     "@trpc/server": "11.0.0-rc.730",

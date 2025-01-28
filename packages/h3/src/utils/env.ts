@@ -1,8 +1,10 @@
-import { join } from 'node:path'
 import { z } from 'zod'
 
 const envVariables = z.object({
-  DATABASE_URL: z.string().optional().default(join(process.cwd(), './pglite')),
+  DATABASE_URL: z
+    .string()
+    .optional()
+    .default('postgresql://local:local@localhost:5432/jobbies'),
   DEV: z.boolean(),
   PROD: z.boolean(),
 })
