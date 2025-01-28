@@ -42,7 +42,7 @@ import {
   ApplicationPayloadSchema,
   applicationStatusEnum,
 } from "@internal/shared";
-import { z } from "zod";
+import { type z } from "zod";
 
 type Mode = "edition" | "creation";
 

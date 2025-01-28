@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { ButtonLoader } from "~/components/Loaders";
-import { SessionData, signIn } from "~/utils/auth-client";
+import { type SessionData, signIn } from "~/utils/auth-client";
 
 export const Route = createFileRoute("/login")({
   component: LoginComponent,
