@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "listhen --port 8888 -w src/index.ts",
+    "dev": "NODE_ENV=development listhen --port 8888 -w src/index.ts",
     "build": "tsup",
     "preview": "pnpm run build && netlify dev"
   },

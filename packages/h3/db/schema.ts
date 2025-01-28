@@ -11,7 +11,7 @@ export const userRelations = relations(user, ({ many }) => ({
 }))
 
 export const applications = pgTable('applications', {
-  id: uuid().primaryKey(),
+  id: uuid().primaryKey().defaultRandom(),
   jobTitle: varchar('job_title', { length: 255 }).notNull(),
   notes: text(),
   application_status: varchar({

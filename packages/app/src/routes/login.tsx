@@ -13,7 +13,11 @@ import { Input } from '~/components/ui/input'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { ensureUserQueryData, getUserQueryData } from '~/stores/session'
+import {
+  ensureUserQueryData,
+  getUserQueryData,
+  useUser,
+} from '~/stores/session'
 import {
   Card,
   CardContent,
@@ -53,6 +57,7 @@ function LoginComponent() {
   })
 
   const navigate = useNavigate()
+  const userQuery = useUser()
 
   const loginMutation = useMutation({
     mutationFn: async (
@@ -77,7 +82,7 @@ function LoginComponent() {
       return result.data.user
     },
     async onSuccess() {
-      await ensureUserQueryData()
+      await userQuery.refetch()
       navigate({ to: '/' })
     },
   })

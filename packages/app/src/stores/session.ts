@@ -16,8 +16,10 @@ export const userQueryOptions = queryOptions({
 /** Get user in cache */
 export const getUserQueryData = () =>
   queryClient.getQueryData(userQueryOptions.queryKey)
+
 export const setUserQueryData = (data: SessionData) =>
   queryClient.setQueryData(userQueryOptions.queryKey, data)
+
 export const ensureUserQueryData = () =>
   queryClient.ensureQueryData(userQueryOptions)
 

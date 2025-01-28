@@ -3,17 +3,19 @@ import { privateProcedure, router } from '..'
 import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '../../db'
-
-const applicationSchema = z
-  .object({})
-  .transform((v) => v as typeof applications.$inferInsert)
+import { ApplicationPayloadSchema } from '@internal/shared'
 
 export const applicationsRouter = router({
-  create: privateProcedure.input(applicationSchema).mutation(({ input }) => {
-    const userId = ''
-    const inputWithUserId = { ...input, userId }
-    return db.insert(applications).values(inputWithUserId).returning()
-  }),
+  create: privateProcedure
+    .input(ApplicationPayloadSchema)
+    .mutation(({ input }) => {
+      const userId = ''
+      const inputWithUserId: typeof applications.$inferInsert = {
+        ...input,
+        userId,
+      }
+      return db.insert(applications).values(inputWithUserId).returning()
+    }),
   read: privateProcedure.query(async () => {
     const userId = ''
 
@@ -28,7 +30,7 @@ export const applicationsRouter = router({
     .input(
       z.object({
         applicationId: z.string(),
-        applicationData: applicationSchema,
+        applicationData: ApplicationPayloadSchema,
       }),
     )
     .mutation(async ({ input }) => {

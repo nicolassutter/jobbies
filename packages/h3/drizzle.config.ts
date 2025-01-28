@@ -2,7 +2,7 @@ import 'dotenv/config'
 import { defineConfig } from 'drizzle-kit'
 import { env } from './src/utils/env'
 
-const driver = env.DEV ? 'pglite' : undefined
+const driver = !env.PROD ? 'pglite' : undefined
 
 export default defineConfig({
   out: './drizzle',

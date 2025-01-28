@@ -4,14 +4,14 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from './db'
 import { env } from './utils/env'
 
-export const auth = betterAuth({
+const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: 'pg', // or "mysql", "sqlite"
   }),
   emailAndPassword: {
     enabled: true,
     // this with `sendVerificationEmail` throwing below will essentially disable email signup
-    requireEmailVerification: true,
+    requireEmailVerification: !env.DEV,
   },
   trustedOrigins: [env.DEV ? 'http://localhost:3001' : undefined].filter(
     (v) => v !== undefined,
@@ -24,3 +24,5 @@ export const auth = betterAuth({
     },
   },
 })
+
+export { auth }

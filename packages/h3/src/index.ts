@@ -21,7 +21,7 @@ const router = createRouter()
 app.use(router.handler)
 
 // Add a new route that matches GET requests to / path
-router.get(
+router.use(
   '/api/trpc/**',
   defineEventHandler((event) => {
     const request = toWebRequest(event)
