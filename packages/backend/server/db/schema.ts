@@ -1,7 +1,7 @@
 import { uuid, pgTable, text, varchar } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 import { relations } from "drizzle-orm";
-//import { applicationStatusEnum } from "~/utils/appwrite";
+import { applicationStatusEnum } from "@internal/shared";
 
 export * from "./auth-schema";
 
@@ -16,7 +16,7 @@ export const applications = pgTable("applications", {
   notes: text(),
   application_status: varchar({
     length: 255,
-    //enum: applicationStatusEnum._def.values,
+    enum: applicationStatusEnum._def.values,
   }),
   url: varchar({ length: 255 }),
   userId: text("user_id")

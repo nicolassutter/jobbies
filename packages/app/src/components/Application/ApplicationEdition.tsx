@@ -234,6 +234,7 @@ export const ApplicationEditionModal: FunctionComponent<{
                         rows={10}
                         maxLength={1000}
                         {...field}
+                        value={field.value ?? undefined}
                       />
                     </FormControl>
                     <FormDescription>
@@ -253,7 +254,7 @@ export const ApplicationEditionModal: FunctionComponent<{
                     <FormLabel>Application status</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      defaultValue={field.value ?? undefined}
                     >
                       <FormControl>
                         <SelectTrigger>

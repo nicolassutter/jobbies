@@ -4,10 +4,10 @@ import { routeTree } from "./routeTree.gen";
 import { queryClient } from "./utils/tanstack";
 import { QueryClientProvider } from "@tanstack/react-query";
 import "./app.css";
-import { trpc } from "./utils/trpc";
 import { useState } from "react";
 import { httpBatchLink } from "@trpc/client";
 import { config } from "./utils/config";
+import { trpc } from "./utils/trpc.client";
 
 // Set up a Router instance
 const router = createRouter({

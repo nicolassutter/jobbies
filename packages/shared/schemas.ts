@@ -16,8 +16,8 @@ export type ApplicationStatus = z.infer<typeof applicationStatusEnum>;
 export const ApplicationSchema = z.object({
   id: z.string(),
   jobTitle: z.string().min(1),
-  notes: z.string().optional(),
-  applicationStatus: applicationStatusEnum.optional(),
+  notes: z.string().nullish(),
+  applicationStatus: applicationStatusEnum.nullish(),
   url: z
     // can be an empty string (if the user wants to empty the field) but it will be transformed to null to empty the field in the database
     // The database won't store empty strings, only null values because it expects a valid url
