@@ -15,7 +15,8 @@
     "@types/node": "^22.10.10",
     "drizzle-kit": "^0.30.2",
     "listhen": "^1.9.0",
-    "tsup": "^8.3.6"
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.2"
   },
   "exports": {
     "./trpc": {

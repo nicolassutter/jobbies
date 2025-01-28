@@ -35,7 +35,7 @@ router.get(
   }),
 )
 
-router.get(
+router.use(
   '/api/auth/**',
   defineEventHandler((event) => {
     const request = toWebRequest(event)
