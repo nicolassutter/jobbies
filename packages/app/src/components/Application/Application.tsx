@@ -5,8 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { FunctionComponent, useMemo } from "react";
-import { ApplicationDocument } from "~/utils/appwrite";
+import { type FunctionComponent, useMemo } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,9 +24,10 @@ import {
 } from "@/components/Application/index";
 import DOMPurify from "dompurify";
 import { marked } from "~/utils/marked";
+import { type Application as TApplication } from "@internal/shared";
 
 export const Application: FunctionComponent<{
-  application: ApplicationDocument;
+  application: TApplication;
 }> = ({ application }) => {
   const deletionModal = useApplicationDeletionModal();
   const editionModal = useApplicationEditionModal();
@@ -49,7 +49,7 @@ export const Application: FunctionComponent<{
         <CardHeader>
           <div className="flex gap-2 justify-between">
             <CardTitle>
-              <h2>{application.job_title}</h2>
+              <h2>{application.jobTitle}</h2>
             </CardTitle>
 
             <DropdownMenu>
@@ -73,7 +73,7 @@ export const Application: FunctionComponent<{
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
-                    deletionModal.open(application.$id);
+                    deletionModal.open(application.id);
                   }}
                 >
                   <Trash />
@@ -93,9 +93,9 @@ export const Application: FunctionComponent<{
           </CardContent>
         )}
 
-        {application.application_status && (
+        {application.applicationStatus && (
           <CardFooter>
-            <Badge>{capitalize(application.application_status)}</Badge>
+            <Badge>{capitalize(application.applicationStatus)}</Badge>
           </CardFooter>
         )}
       </Card>

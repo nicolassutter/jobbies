@@ -29,25 +29,32 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { ButtonLoader } from "../Loaders";
-import { FunctionComponent, useEffect, useRef } from "react";
+import { type FunctionComponent, useEffect, useRef } from "react";
 import { create } from "zustand";
 import { combine } from "zustand/middleware";
 import { produce } from "immer";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { PlusCircle } from "lucide-react";
 import { trpc } from "~/utils/trpc.client";
+import { capitalize } from "~/lib/utils";
+import {
+  type Application,
+  ApplicationPayloadSchema,
+  applicationStatusEnum,
+} from "@internal/shared";
+import { z } from "zod";
 
 type Mode = "edition" | "creation";
 
 export const useApplicationEditionModal = create(
   combine(
     {
-      application: undefined as ApplicationDocument | undefined,
+      application: undefined as Application | undefined,
       mode: "creation" as Mode,
       isOpen: false,
     },
     (set) => ({
-      open: (mode: Mode, application?: ApplicationDocument) => {
+      open: (mode: Mode, application?: Application) => {
         return set(() => ({ application, mode, isOpen: true }));
       },
       close: () => {
@@ -61,21 +68,25 @@ export const useApplicationEditionModal = create(
   ),
 );
 
+const statuses = applicationStatusEnum._def.values
+  .toSorted((a, b) => a.localeCompare(b))
+  .map((status) => capitalize(status));
+
 export const ApplicationEditionModal: FunctionComponent<{
   trigger: boolean;
 }> = (props) => {
   const modalState = useApplicationEditionModal();
 
-  const defaultValues: Application = {
+  const defaultValues: z.infer<typeof ApplicationPayloadSchema> = {
     // string values need to be initialized to empty string for controlled inputs
-    job_title: modalState.application?.job_title ?? "",
+    jobTitle: modalState.application?.jobTitle ?? "",
     url: modalState.application?.url ?? "",
     notes: modalState.application?.notes ?? "",
-    application_status: modalState.application?.application_status,
+    applicationStatus: modalState.application?.applicationStatus,
   };
 
   const form = useForm<Application>({
-    resolver: zodResolver(ApplicationSchema),
+    resolver: zodResolver(ApplicationPayloadSchema),
     defaultValues,
   });
 
@@ -180,7 +191,7 @@ export const ApplicationEditionModal: FunctionComponent<{
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
-                name="job_title"
+                name="jobTitle"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Job title</FormLabel>
@@ -236,7 +247,7 @@ export const ApplicationEditionModal: FunctionComponent<{
 
               <FormField
                 control={form.control}
-                name="application_status"
+                name="applicationStatus"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Application status</FormLabel>

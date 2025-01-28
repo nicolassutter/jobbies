@@ -30,6 +30,7 @@
     "@trpc/server": "11.0.0-rc.730",
     "better-auth": "^1.1.14",
     "drizzle-orm": "^0.38.4",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "@internal/shared": "workspace:*"
   }
 }

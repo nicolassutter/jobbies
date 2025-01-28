@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { capitalize } from "~/lib/utils";
 
 export const applicationStatusEnum = z.enum([
   "applied",
@@ -11,13 +10,11 @@ export const applicationStatusEnum = z.enum([
   "ghosted",
   "archived",
 ]);
+
 export type ApplicationStatus = z.infer<typeof applicationStatusEnum>;
 
-export const statuses = applicationStatusEnum._def.values
-  .toSorted((a, b) => a.localeCompare(b))
-  .map((status) => capitalize(status));
-
 export const ApplicationSchema = z.object({
+  id: z.string(),
   jobTitle: z.string().min(1),
   notes: z.string().optional(),
   applicationStatus: applicationStatusEnum.optional(),
@@ -30,4 +27,8 @@ export const ApplicationSchema = z.object({
     .transform((v) => (v === "" ? null : v))
     .pipe(z.string().url().optional().nullable()),
 });
+/**
+ * The payload schema is used to validate the payload sent to the server.
+ */
+export const ApplicationPayloadSchema = ApplicationSchema.omit({ id: true });
 export type Application = z.infer<typeof ApplicationSchema>;

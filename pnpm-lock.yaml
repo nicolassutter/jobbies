@@ -35,6 +35,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.54.2(react@18.3.1))
+      '@internal/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@radix-ui/react-dialog':
         specifier: ^1.1.5
         version: 1.1.5(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -177,6 +180,9 @@ importers:
       '@electric-sql/pglite':
         specifier: ^0.2.16
         version: 0.2.16
+      '@internal/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@trpc/server':
         specifier: 11.0.0-rc.730
         version: 11.0.0-rc.730(typescript@5.7.3)
@@ -202,6 +208,16 @@ importers:
       nitropack:
         specifier: latest
         version: 2.10.4(@electric-sql/pglite@0.2.16)(drizzle-orm@0.38.4(@electric-sql/pglite@0.2.16)(@types/react@18.3.18)(kysely@0.27.5)(react@18.3.1))(typescript@5.7.3)
+
+  packages/shared:
+    dependencies:
+      zod:
+        specifier: ^3.24.1
+        version: 3.24.1
+    devDependencies:
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.3
 
 packages:
 
