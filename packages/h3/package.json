@@ -1,0 +1,37 @@
+{
+  "name": "@internal/server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "listhen --port 8888 -w src/index.ts",
+    "build": "tsup",
+    "preview": "pnpm run build && netlify dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.10.10",
+    "drizzle-kit": "^0.30.2",
+    "listhen": "^1.9.0",
+    "tsup": "^8.3.6"
+  },
+  "exports": {
+    "./trpc": {
+      "import": "./src/trpc/routers/app.router.ts"
+    }
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.16",
+    "@internal/shared": "workspace:*",
+    "@netlify/functions": "^3.0.0",
+    "@trpc/server": "11.0.0-rc.730",
+    "better-auth": "^1.1.14",
+    "drizzle-orm": "^0.38.4",
+    "h3": "^1.14.0",
+    "netlify-cli": "^18.0.3",
+    "pg": "^8.13.1",
+    "zod": "^3.24.1"
+  }
+}
