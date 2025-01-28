@@ -1,4 +1,11 @@
 // https://nitro.unjs.io/guide/typescript
 {
-  "extends": "./.nitro/types/tsconfig.json"
-}
+  "extends": "./.nitro/types/tsconfig.json",
+  "compilerOptions": {
+    // Disables every default Nitro TS paths except for #imports, this makes inference work between trpc server and client.
+    "paths": {
+      "#imports": [
+        "./.nitro/types/nitro-imports"
+      ]
+    }
+  }

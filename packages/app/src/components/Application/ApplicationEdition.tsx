@@ -25,17 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ApplicationDocument,
-  ApplicationSchema,
-  createApplication,
-  statuses,
-  updateApplication,
-  type Application,
-} from "~/utils/appwrite";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Textarea } from "@/components/ui/textarea";
 import { ButtonLoader } from "../Loaders";
 import { FunctionComponent, useEffect, useRef } from "react";
@@ -88,8 +79,6 @@ export const ApplicationEditionModal: FunctionComponent<{
     defaultValues,
   });
 
-  const queryClient = useQueryClient();
-
   useEffect(() => {
     // make sure the default values are fresh
     // @see https://react-hook-form.com/docs/useform/reset
@@ -100,39 +89,29 @@ export const ApplicationEditionModal: FunctionComponent<{
 
   const createMutation = trpc.applications.create.useMutation({
     async onSuccess() {
-      utils.applications.read.invalidate();
+      await utils.applications.read.invalidate();
       modalState.close();
     },
   });
 
-  const updateMutation = useMutation({
-    mutationFn: async ({
-      applicationId,
-      application,
-    }: {
-      applicationId: string;
-      application: Application;
-    }) => {
-      return updateApplication(applicationId, application);
-    },
+  const updateMutation = trpc.applications.update.useMutation({
     async onSuccess(updatedApplication) {
       // update the cache with the new application
-      const cache = queryClient.getQueryData<ApplicationsQueryReturn>([
-        "applications",
-      ]);
+      const cache = utils.applications.read.getData();
 
       if (!cache) return;
 
-      const idx = cache.documents.findIndex(
-        (doc) => doc.$id === modalState.application?.$id,
+      const idx = cache.findIndex(
+        (doc) => doc.id === modalState.application?.id,
       );
 
       if (idx === -1) return;
 
       const newCache = produce(cache, (draft) => {
-        draft.documents[idx] = updatedApplication;
+        draft[idx] = updatedApplication;
       });
-      queryClient.setQueryData(["applications"], newCache);
+
+      utils.applications.read.setData(undefined, newCache);
       modalState.close();
     },
   });
@@ -142,8 +121,8 @@ export const ApplicationEditionModal: FunctionComponent<{
       if (!modalState.application) return;
 
       return await updateMutation.mutateAsync({
-        applicationId: modalState.application.$id,
-        application: values,
+        applicationId: modalState.application.id,
+        applicationData: values,
       });
     }
 

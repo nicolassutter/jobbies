@@ -13,6 +13,13 @@
     "h3": "^1.14.0",
     "nitropack": "latest"
   },
+  "typesVersions": {
+    "*": {
+      "trpc": [
+        "./server/trpc/routers/app.router.ts"
+      ]
+    }
+  },
   "exports": {
     "./trpc": {
       "import": "./server/trpc/routers/app.router.ts"

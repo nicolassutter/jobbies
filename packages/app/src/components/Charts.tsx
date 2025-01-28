@@ -24,14 +24,14 @@ export function ApplicationsByStatusChart() {
 
   const data = useMemo(() => {
     const groupedByStatus = Object.groupBy(
-      applicationsQuery.data?.documents ?? [],
+      applicationsQuery.data ?? [],
       (e) => e.application_status ?? "Unknown",
     );
 
     return Object.entries(groupedByStatus).map(([status, applications]) => {
       return {
         status: capitalize(status),
-        count: applications.length,
+        count: applications?.length ?? 0,
         fill:
           status !== "Unknown" ? "var(--color-count)" : "hsl(var(--primary))",
       };

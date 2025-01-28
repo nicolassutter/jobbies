@@ -1,54 +1,46 @@
 import { queryOptions, useMutation, useQuery } from "@tanstack/react-query";
-import { getSession, getUser, logout } from "../utils/appwrite";
 import { queryClient } from "~/utils/tanstack";
 import { redirect, useNavigate } from "@tanstack/react-router";
+import { getSession, type SessionData, signOut } from "~/utils/auth-client";
 
-// Fetch the session data on app load.
-export const sessionQueryOptions = queryOptions({
-  queryKey: ["session"],
-  queryFn: async () => {
+export const userQueryOptions = queryOptions({
+  queryKey: ["user"],
+  queryFn: async (): Promise<SessionData> => {
     const session = await getSession();
-    return session;
+    if (session.error) throw session.error;
+    return session.data;
   },
   retry: false,
 });
 
-export const userQueryOptions = queryOptions({
-  queryKey: ["user"],
-  queryFn: async () => {
-    return getUser();
-  },
-});
-
-/** Get session in cache */
-export const getSessionQueryData = () => {
-  return queryClient.getQueryData(sessionQueryOptions.queryKey);
-};
 /** Get user in cache */
 export const getUserQueryData = () =>
   queryClient.getQueryData(userQueryOptions.queryKey);
+export const setUserQueryData = (data: SessionData) =>
+  queryClient.setQueryData(userQueryOptions.queryKey, data);
+export const ensureUserQueryData = () =>
+  queryClient.ensureQueryData(userQueryOptions);
 
-export const useSession = () => useQuery(sessionQueryOptions);
 export const useUser = () => useQuery(userQueryOptions);
+export const isLoggedIn = () => !!getUserQueryData()?.user;
 
 export const useLogout = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: () => logout(),
+    mutationFn: async () => {
+      const t = await signOut();
+      if (t.error) throw t.error;
+    },
     onSuccess() {
-      queryClient.setQueryData(sessionQueryOptions.queryKey, null);
-      queryClient.setQueryData(userQueryOptions.queryKey, null);
+      setUserQueryData(null);
       navigate({ to: "/login" });
     },
   });
 };
 
 export const requireAuth = () => {
-  // gets the user in cache, does not make a new request
-  const user = getUserQueryData();
-
-  if (!user) {
+  if (!isLoggedIn()) {
     throw redirect({
       to: "/login",
       search: {

@@ -1,8 +1,8 @@
-import { applications } from "~/db/schema";
+import { applications } from "../../db/schema";
 import { privateProcedure, router } from "..";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "~/db";
+import { db } from "../../db";
 
 const applicationSchema = z
   .object({})
@@ -31,7 +31,7 @@ export const applicationsRouter = router({
         applicationData: applicationSchema,
       }),
     )
-    .mutation(({ input }) => {
+    .mutation(async ({ input }) => {
       const userId = "";
 
       const { applicationId, applicationData } = input;
@@ -41,7 +41,14 @@ export const applicationsRouter = router({
         eq(applications.id, applicationId),
       );
 
-      return db.update(applications).set(applicationData).where(isUserAllowed);
+      // since applications.id is unique, we can only have one result
+      const [updatedApp] = await db
+        .update(applications)
+        .set(applicationData)
+        .where(isUserAllowed)
+        .returning();
+
+      return updatedApp;
     }),
   delete: privateProcedure.input(z.string()).mutation(async ({ input: id }) => {
     await db.delete(applications).where(eq(applications.id, id));

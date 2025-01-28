@@ -1,5 +1,5 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   Form,
   FormControl,
@@ -13,12 +13,7 @@ import { Input } from "~/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { login } from "~/utils/appwrite";
-import {
-  getSessionQueryData,
-  getUserQueryData,
-  userQueryOptions,
-} from "~/stores/session";
+import { ensureUserQueryData, getUserQueryData } from "~/stores/session";
 import {
   Card,
   CardContent,
@@ -27,7 +22,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { ButtonLoader } from "~/components/Loaders";
-import { signIn } from "~/utils/auth-client";
+import { SessionData, signIn } from "~/utils/auth-client";
 
 export const Route = createFileRoute("/login")({
   component: LoginComponent,
@@ -57,32 +52,32 @@ function LoginComponent() {
     },
   });
 
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
-    mutationFn: async (data: z.infer<typeof schema>) => {
-      const session = getSessionQueryData();
+    mutationFn: async (
+      data: z.infer<typeof schema>,
+    ): Promise<NonNullable<SessionData>["user"]> => {
+      const authData = getUserQueryData();
 
-      if (session) {
+      if (authData) {
         // already logged in
-        return session;
+        return authData.user;
       }
 
-      const result = signIn.email({
+      const result = await signIn.email({
         email: data.email,
         password: data.password,
       });
 
-      return result;
+      if (result.error) {
+        throw result.error;
+      }
+
+      return result.data.user;
     },
-    async onSuccess(session) {
-      // update the query without refetching
-      queryClient.setQueryData(["session"], () => session);
-
-      // need to fetch the user data
-      await queryClient.fetchQuery(userQueryOptions);
-
+    async onSuccess() {
+      await ensureUserQueryData();
       navigate({ to: "/" });
     },
   });
