@@ -1,9 +1,9 @@
 import PocketBase, { type RecordService, type AuthRecord } from 'pocketbase'
-import { queryOptions, useMutation, useQuery } from '@tanstack/react-query'
-import { queryClient } from '~/utils/tanstack'
+import { useMutation } from '@tanstack/react-query'
 import { redirect, useNavigate } from '@tanstack/react-router'
 import { config } from '~/utils/config'
 import type { OmitIndexSignature } from 'type-fest'
+import { useEffect, useState } from 'react'
 
 type User = {
   email: string
@@ -25,7 +25,6 @@ type SafeAuthRecord = (OmitIndexSignature<AuthRecord> & User) | null | undefined
 export const signIn = (email: string, password: string) =>
   pb.collection('users').authWithPassword(email, password)
 
-export const isSessionValid = () => pb.authStore.isValid
 export const getSession = () => pb.authStore.record as SafeAuthRecord
 export const getCookie = () => pb.authStore.exportToCookie()
 export const refreshSession = async () => {
@@ -33,38 +32,55 @@ export const refreshSession = async () => {
   return getSession()
 }
 
-export const userQueryOptions = queryOptions({
-  queryKey: ['user'],
-  queryFn: async (): Promise<SafeAuthRecord> => {
-    if (!isSessionValid()) return null
-    const session = refreshSession()
-    return session
-  },
-  retry: false,
-})
+export const isLoggedIn = () => pb.authStore.isValid && pb.authStore.record
 
-/** Get user in cache */
-export const getUserQueryData = () =>
-  queryClient.getQueryData(userQueryOptions.queryKey)
+export const getUser = () => (isLoggedIn() ? getSession() : undefined)
 
-export const setUserQueryData = (data: SafeAuthRecord) =>
-  queryClient.setQueryData(userQueryOptions.queryKey, data)
+export const useUser = () => {
+  const [user, setUser] = useState(getUser())
 
-export const ensureUserQueryData = () =>
-  queryClient.ensureQueryData(userQueryOptions)
+  const unsub = pb.authStore.onChange(() => {
+    setUser(getUser())
+  })
 
-export const useUser = () => useQuery(userQueryOptions)
-export const isLoggedIn = () => isSessionValid() && !!getUserQueryData()
+  useEffect(() => {
+    return () => unsub()
+  }, [])
+
+  return user
+}
+
+/** Closure to create `ensureAuthReady` */
+const authReadyFactory = () => {
+  let isAuthReady = false
+
+  return async (): Promise<SafeAuthRecord> => {
+    if (isAuthReady === true) return getUser()
+
+    return new Promise((resolve) => {
+      const unsub = pb.authStore.onChange(() => {
+        resolve(getUser())
+        isAuthReady = true
+        unsub()
+      }, true)
+    })
+  }
+}
+
+/**
+ * Makes sure that auth is ready by checking that the store has changed once
+ */
+export const ensureAuthReady = authReadyFactory()
 
 export const useLogout = () => {
   const navigate = useNavigate()
 
+  // we don't have to make it a mutation but just in case of future refactoring
   return useMutation({
     mutationFn: async () => {
       pb.authStore.clear()
     },
     onSuccess() {
-      setUserQueryData(null)
       navigate({ to: '/login' })
     },
   })
@@ -80,13 +96,13 @@ export const requireAuth = () => {
     })
   }
 }
+
 export const useLogin = () => {
   const navigate = useNavigate()
-  const userQuery = useUser()
 
   return useMutation({
     mutationFn: async (data: { email: string; password: string }) => {
-      const authData = getUserQueryData()
+      const authData = getUser()
 
       if (authData) {
         // already logged in
@@ -97,7 +113,6 @@ export const useLogin = () => {
       return result.record
     },
     async onSuccess() {
-      await userQuery.refetch()
       navigate({ to: '/' })
     },
   })

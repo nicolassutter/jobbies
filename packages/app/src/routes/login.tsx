@@ -12,7 +12,7 @@ import { Input } from '~/components/ui/input'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { getUserQueryData, useLogin } from '~/stores/session'
+import { isLoggedIn, useLogin } from '~/stores/session'
 import {
   Card,
   CardContent,
@@ -25,10 +25,8 @@ import { ButtonLoader } from '~/components/Loaders'
 export const Route = createFileRoute('/login')({
   component: LoginComponent,
   beforeLoad() {
-    const user = getUserQueryData()
-
     // alread logged in, cannot access login page
-    if (user) {
+    if (isLoggedIn()) {
       throw redirect({
         to: '/',
       })
