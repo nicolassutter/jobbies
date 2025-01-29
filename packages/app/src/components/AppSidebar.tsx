@@ -8,8 +8,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { useLogout } from '~/stores/session'
 import { Link } from '@tanstack/react-router'
+import { useAuth } from '~/stores/session'
 
 type MenuItem = {
   title: string
@@ -19,7 +19,7 @@ type MenuItem = {
 }
 
 export function AppSidebar() {
-  const logout = useLogout()
+  const { logout } = useAuth()
 
   const items: MenuItem[] = [
     {

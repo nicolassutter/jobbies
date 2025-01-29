@@ -1,9 +1,16 @@
 import PocketBase, { type RecordService, type AuthRecord } from 'pocketbase'
 import { useMutation } from '@tanstack/react-query'
-import { redirect, useNavigate } from '@tanstack/react-router'
+import {
+  getRouteApi,
+  redirect,
+  RouteApi,
+  useNavigate,
+  useSearch,
+  type RouteById,
+} from '@tanstack/react-router'
 import { config } from '~/utils/config'
 import type { OmitIndexSignature } from 'type-fest'
-import { useEffect, useState } from 'react'
+import { create } from 'zustand'
 
 type User = {
   email: string
@@ -15,68 +22,56 @@ interface TypedPocketBase extends PocketBase {
   collection(idOrName: string): RecordService // default fallback for any other collection
   collection(idOrName: 'users'): RecordService<User>
 }
-const pb = new PocketBase(config.authUrl) as TypedPocketBase
+
+const useAuthStore = create<{
+  user: SafeAuthRecord
+  authReady: boolean
+}>(() => ({
+  user: null,
+  /**
+   * This is to make sure that auth is ready so we can protect routes
+   */
+  authReady: false,
+}))
+
+const isLoggedIn = (pb: PocketBase) =>
+  Boolean(pb.authStore.isValid && pb.authStore.record)
+
+const createPb = () => {
+  const pb = new PocketBase(config.authUrl) as TypedPocketBase
+
+  /**
+   * When pb store changes, update ours
+   */
+  pb.authStore.onChange(() => {
+    const user = isLoggedIn(pb)
+      ? (pb.authStore.record as SafeAuthRecord)
+      : undefined
+
+    useAuthStore.setState({ user, authReady: true })
+  }, true)
+
+  return pb
+}
+
+const pb = createPb()
+
+const getCookie = () => pb.authStore.exportToCookie()
 
 /**
  * Remove every `any` from the default type
  */
 type SafeAuthRecord = (OmitIndexSignature<AuthRecord> & User) | null | undefined
 
-export const signIn = (email: string, password: string) =>
-  pb.collection('users').authWithPassword(email, password)
-
-export const getSession = () => pb.authStore.record as SafeAuthRecord
-export const getCookie = () => pb.authStore.exportToCookie()
-export const refreshSession = async () => {
-  await pb.collection('users').authRefresh()
-  return getSession()
-}
-
-export const isLoggedIn = () => pb.authStore.isValid && pb.authStore.record
-
-export const getUser = () => (isLoggedIn() ? getSession() : undefined)
-
-export const useUser = () => {
-  const [user, setUser] = useState(getUser())
-
-  const unsub = pb.authStore.onChange(() => {
-    setUser(getUser())
-  })
-
-  useEffect(() => {
-    return () => unsub()
-  }, [])
-
-  return user
-}
-
-/** Closure to create `ensureAuthReady` */
-const authReadyFactory = () => {
-  let isAuthReady = false
-
-  return async (): Promise<SafeAuthRecord> => {
-    if (isAuthReady === true) return getUser()
-
-    return new Promise((resolve) => {
-      const unsub = pb.authStore.onChange(() => {
-        resolve(getUser())
-        isAuthReady = true
-        unsub()
-      }, true)
-    })
-  }
-}
-
-/**
- * Makes sure that auth is ready by checking that the store has changed once
- */
-export const ensureAuthReady = authReadyFactory()
-
-export const useLogout = () => {
+export const useAuth = () => {
   const navigate = useNavigate()
+  const searchParams = useSearch({
+    strict: false,
+  })
+  const user = useAuthStore((state) => state.user)
 
   // we don't have to make it a mutation but just in case of future refactoring
-  return useMutation({
+  const logout = useMutation({
     mutationFn: async () => {
       pb.authStore.clear()
     },
@@ -84,36 +79,59 @@ export const useLogout = () => {
       navigate({ to: '/login' })
     },
   })
+
+  const login = useMutation({
+    mutationFn: async (data: { email: string; password: string }) => {
+      const user = useAuthStore.getState().user
+
+      // already logged in
+      if (user) return user
+
+      const result = await pb
+        .collection('users')
+        .authWithPassword(data.email, data.password)
+
+      return result.record
+    },
+    async onSuccess() {
+      navigate({ to: searchParams.redirect ?? '/' })
+    },
+  })
+
+  return { logout, login, user }
 }
 
+/**
+ * Makes sure that auth is ready by checking that the store has changed once
+ */
+export const ensureAuthReady = async (): Promise<SafeAuthRecord> => {
+  const state = () => useAuthStore.getState()
+
+  // auth is ready
+  if (state().authReady === true) return state().user
+
+  // auth is not ready but there is a record in store, try to refresh it
+  if (pb.authStore.record) {
+    await pb.collection('users').authRefresh()
+  }
+
+  // auth is ready
+  useAuthStore.setState({ authReady: true })
+  return state().user
+}
+
+export const LoginPageApi = getRouteApi('/login')
+
 export const requireAuth = () => {
-  if (!isLoggedIn()) {
+  if (!isLoggedIn(pb)) {
     throw redirect({
       to: '/login',
       search: {
-        redirect: location.href,
-      },
+        redirect: location.pathname,
+      } satisfies ReturnType<(typeof LoginPageApi)['useSearch']>,
     })
   }
 }
 
-export const useLogin = () => {
-  const navigate = useNavigate()
-
-  return useMutation({
-    mutationFn: async (data: { email: string; password: string }) => {
-      const authData = getUser()
-
-      if (authData) {
-        // already logged in
-        return authData
-      }
-
-      const result = await signIn(data.email, data.password)
-      return result.record
-    },
-    async onSuccess() {
-      navigate({ to: '/' })
-    },
-  })
-}
+const _isLoggedIn = () => isLoggedIn(pb)
+export { getCookie, _isLoggedIn as isLoggedIn }

@@ -12,7 +12,7 @@ import { Input } from '~/components/ui/input'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { isLoggedIn, useLogin } from '~/stores/session'
+import { isLoggedIn, useAuth } from '~/stores/session'
 import {
   Card,
   CardContent,
@@ -22,8 +22,14 @@ import {
 } from '~/components/ui/card'
 import { ButtonLoader } from '~/components/Loaders'
 
+const searchSchema = z.object({
+  // optional query param to redirect to after login
+  redirect: z.string().optional(),
+})
+
 export const Route = createFileRoute('/login')({
   component: LoginComponent,
+  validateSearch: searchSchema,
   beforeLoad() {
     // alread logged in, cannot access login page
     if (isLoggedIn()) {
@@ -48,7 +54,7 @@ function LoginComponent() {
     },
   })
 
-  const loginMutation = useLogin()
+  const { login: loginMutation } = useAuth()
 
   return (
     <Form {...form}>

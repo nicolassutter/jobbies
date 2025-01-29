@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { requireAuth, useUser } from '~/stores/session'
+import { requireAuth, useAuth } from '~/stores/session'
 import { Application } from '~/components/Application'
 import {
   ApplicationDeletionModal,
@@ -15,7 +15,7 @@ export const Route = createFileRoute('/')({
 })
 
 function HomeComponent() {
-  const user = useUser()
+  const { user } = useAuth()
   const applicationsQuery = trpc.applications.read.useQuery()
 
   return (
