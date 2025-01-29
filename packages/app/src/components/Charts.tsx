@@ -25,7 +25,7 @@ export function ApplicationsByStatusChart() {
   const data = useMemo(() => {
     const groupedByStatus = Object.groupBy(
       applicationsQuery.data ?? [],
-      (e) => e.application_status ?? 'Unknown',
+      (e) => e.applicationStatus ?? 'Unknown',
     )
 
     return Object.entries(groupedByStatus).map(([status, applications]) => {

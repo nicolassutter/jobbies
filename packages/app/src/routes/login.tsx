@@ -1,5 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import {
   Form,
   FormControl,
@@ -13,11 +12,7 @@ import { Input } from '~/components/ui/input'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {
-  ensureUserQueryData,
-  getUserQueryData,
-  useUser,
-} from '~/stores/session'
+import { getUserQueryData, useLogin } from '~/stores/session'
 import {
   Card,
   CardContent,
@@ -26,7 +21,6 @@ import {
   CardTitle,
 } from '~/components/ui/card'
 import { ButtonLoader } from '~/components/Loaders'
-import { type SessionData, signIn } from '~/utils/auth-client'
 
 export const Route = createFileRoute('/login')({
   component: LoginComponent,
@@ -56,36 +50,7 @@ function LoginComponent() {
     },
   })
 
-  const navigate = useNavigate()
-  const userQuery = useUser()
-
-  const loginMutation = useMutation({
-    mutationFn: async (
-      data: z.infer<typeof schema>,
-    ): Promise<NonNullable<SessionData>['user']> => {
-      const authData = getUserQueryData()
-
-      if (authData) {
-        // already logged in
-        return authData.user
-      }
-
-      const result = await signIn.email({
-        email: data.email,
-        password: data.password,
-      })
-
-      if (result.error) {
-        throw result.error
-      }
-
-      return result.data.user
-    },
-    async onSuccess() {
-      await userQuery.refetch()
-      navigate({ to: '/' })
-    },
-  })
+  const loginMutation = useLogin()
 
   return (
     <Form {...form}>
