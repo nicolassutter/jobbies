@@ -9,7 +9,6 @@ import {
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { appRouter } from './trpc/routers/app.router'
 import { createContext } from './trpc/context'
-import { auth } from './auth'
 import { type Context } from '@netlify/functions'
 
 // Create an app instance
@@ -32,14 +31,6 @@ router.use(
       router: appRouter,
       createContext,
     })
-  }),
-)
-
-router.use(
-  '/api/auth/**',
-  defineEventHandler((event) => {
-    const request = toWebRequest(event)
-    return auth.handler(request)
   }),
 )
 

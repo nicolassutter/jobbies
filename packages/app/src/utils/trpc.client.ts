@@ -2,6 +2,7 @@ import { createTRPCReact } from '@trpc/react-query'
 import type { AppRouter } from '@internal/server/trpc'
 import { httpBatchLink } from '@trpc/client'
 import { config } from './config'
+import { getCookie } from '~/stores/session'
 
 const trpc = createTRPCReact<AppRouter>()
 
@@ -19,7 +20,9 @@ const createTRPCClient = () =>
         },
         // You can pass any HTTP headers you wish here
         async headers() {
-          return {}
+          return {
+            'X-PB-AUTH': getCookie(),
+          }
         },
       }),
     ],

@@ -15,7 +15,7 @@ export const Route = createFileRoute('/')({
 })
 
 function HomeComponent() {
-  const user = useUser()?.data?.user
+  const user = useUser()?.data
   const applicationsQuery = trpc.applications.read.useQuery()
 
   return (
