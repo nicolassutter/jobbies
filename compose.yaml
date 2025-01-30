@@ -3,10 +3,9 @@ services:
     container_name: jobbies_auth_pocketbase
     restart: unless-stopped
     build:
-      context: ./packages/server/
-      dockerfile: Dockerfile.pocketbase
-      target: pocketbase
+      context: ./packages/auth/
+      dockerfile: Dockerfile
     ports:
       - 8080:8080
     volumes:
-      - ./packages/server/pb_data:/pb/pb_data
+      - ./packages/auth/pb_data:/pb/pb_data

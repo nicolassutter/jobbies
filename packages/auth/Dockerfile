@@ -1,4 +1,4 @@
-FROM alpine as pocketbase
+FROM alpine
 
 ARG PB_VERSION=0.24.4
 
