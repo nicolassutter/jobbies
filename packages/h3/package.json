@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=development listhen --port 8888 -w src/index.ts",
-    "build": "tsup",
+    "build": "tsup-node",
     "preview": "pnpm run build && netlify dev"
   },
   "keywords": [],
@@ -27,6 +27,7 @@
     "@internal/shared": "workspace:*",
     "@netlify/functions": "^3.0.0",
     "@trpc/server": "11.0.0-rc.730",
+    "@types/pg": "^8.11.11",
     "better-auth": "^1.1.14",
     "drizzle-orm": "^0.38.4",
     "h3": "^1.14.0",
