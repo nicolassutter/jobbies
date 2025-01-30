@@ -3,22 +3,10 @@ services:
     container_name: jobbies_auth_pocketbase
     restart: unless-stopped
     build:
-      context: ./packages/auth/
-      dockerfile: Dockerfile
+      context: ./packages/server/
+      dockerfile: Dockerfile.pocketbase
+      target: pocketbase
     ports:
       - 8080:8080
     volumes:
-      - ./packages/auth/pb_data:/pb/pb_data
-
-  postgres:
-    image: postgres:17-alpine
-    container_name: postgres
-    environment:
-      POSTGRES_USER: local
-      POSTGRES_PASSWORD: local
-      POSTGRES_DB: jobbies
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
-
+      - ./packages/server/pb_data:/pb/pb_data
