@@ -1,6 +1,13 @@
+# functions
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/index"
   status = 200
   force = true
+
+# spa redirects
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
