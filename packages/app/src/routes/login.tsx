@@ -102,6 +102,13 @@ function LoginComponent() {
                 )}
               />
             </div>
+            <p className='text-xs text-muted-foreground'>
+              <span className='font-bold'>Demo credentials</span>
+              <br />
+              email: demo@user.com
+              <br />
+              password: demo1234
+            </p>
           </CardContent>
           <CardFooter className='flex justify-end'>
             <Button
