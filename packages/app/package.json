@@ -16,6 +16,7 @@
     "@types/node": "^22.10.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "@vitejs/plugin-react": "^4.3.2",
     "autoprefixer": "^10.4.20",
     "babel-plugin-react-compiler": "19.0.0-beta-27714ef-20250124",
@@ -25,6 +26,7 @@
     "type-fest": "^4.33.0",
     "typescript": "^5.7.2",
     "vite": "^6.0.3",
+    "vite-plugin-pwa": "^0.21.1",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {

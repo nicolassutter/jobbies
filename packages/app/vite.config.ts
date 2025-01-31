@@ -4,6 +4,7 @@ import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import autoprefixer from 'autoprefixer'
 import tailwindcss from 'tailwindcss'
+import { VitePWA } from 'vite-plugin-pwa'
 
 const ReactCompilerConfig = {
   target: '18', // '17' | '18' | '19'
@@ -19,6 +20,39 @@ export default defineConfig({
       },
     }),
     tsconfigPaths(),
+    VitePWA({
+      includeAssets: ['icon.svg', 'apple-touch-icon.png', 'mask-icon.svg'],
+      manifest: {
+        name: 'Jobbies',
+        short_name: 'Jobbies',
+        description: 'A job application tracker',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: 'pwa-64x64.png',
+            sizes: '64x64',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: 'maskable-icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
+      },
+    }),
   ],
   css: {
     postcss: {
