@@ -9,6 +9,7 @@ import {
 import { config } from '~/utils/config'
 import type { OmitIndexSignature } from 'type-fest'
 import { create } from 'zustand'
+import { trpc } from '~/utils/trpc.client'
 
 type User = {
   email: string
@@ -68,6 +69,7 @@ export const useAuth = () => {
     strict: false,
   })
   const user = useAuthStore((state) => state.user)
+  const utils = trpc.useUtils()
 
   // we don't have to make it a mutation but just in case of future refactoring
   const logout = useMutation({
@@ -75,7 +77,9 @@ export const useAuth = () => {
       pb.authStore.clear()
     },
     onSuccess() {
+      // clear data from cache
       navigate({ to: '/login' })
+      utils.applications.read.setData(undefined, undefined)
     },
   })
 
