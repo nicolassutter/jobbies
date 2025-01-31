@@ -22,6 +22,9 @@ export default defineConfig({
     tsconfigPaths(),
     VitePWA({
       includeAssets: ['icon.svg', 'apple-touch-icon.png', 'mask-icon.svg'],
+      workbox: {
+        cleanupOutdatedCaches: true,
+      },
       manifest: {
         name: 'Jobbies',
         short_name: 'Jobbies',
