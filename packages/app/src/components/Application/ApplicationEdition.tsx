@@ -74,6 +74,7 @@ const statuses = applicationStatusEnum._def.values
 
 export const ApplicationEditionModal: FunctionComponent<{
   trigger: boolean
+  className?: string
 }> = (props) => {
   const modalState = useApplicationEditionModal()
 
@@ -170,7 +171,7 @@ export const ApplicationEditionModal: FunctionComponent<{
       )}
 
       <DialogContent
-        className='w-full max-w-2xl'
+        className='w-full max-w-2xl max-h-dvh overflow-y-auto'
         onOpenAutoFocus={(e) => {
           // in edition mode, focus the cancel button instead of  the first input
           if (modalState.mode === 'edition') {
@@ -281,7 +282,7 @@ export const ApplicationEditionModal: FunctionComponent<{
               />
             </div>
 
-            <DialogFooter>
+            <DialogFooter className='gap-2 sm:gap-0'>
               <DialogClose asChild>
                 <Button
                   variant='secondary'
@@ -290,6 +291,7 @@ export const ApplicationEditionModal: FunctionComponent<{
                   Cancel
                 </Button>
               </DialogClose>
+
               <Button type='submit'>
                 Save changes
                 {isPending && <ButtonLoader />}

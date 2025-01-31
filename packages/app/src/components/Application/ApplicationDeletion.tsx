@@ -64,7 +64,7 @@ export const ApplicationDeletionModal: FunctionComponent = () => {
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter>
+        <DialogFooter className='gap-2 sm:gap-0'>
           <DialogClose asChild>
             <Button variant='secondary'>Cancel</Button>
           </DialogClose>
