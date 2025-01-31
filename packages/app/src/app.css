@@ -86,6 +86,6 @@
 
 @layer base {
   body {
-    @apply min-h-[100dvh];
+    @apply min-h-svh;
   }
 }

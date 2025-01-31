@@ -171,7 +171,7 @@ export const ApplicationEditionModal: FunctionComponent<{
       )}
 
       <DialogContent
-        className='w-full max-w-2xl max-h-dvh overflow-y-auto'
+        className='w-full max-w-2xl max-h-svh overflow-y-auto'
         onOpenAutoFocus={(e) => {
           // in edition mode, focus the cancel button instead of  the first input
           if (modalState.mode === 'edition') {

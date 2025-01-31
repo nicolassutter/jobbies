@@ -27,7 +27,7 @@ function RootComponent() {
             <SidebarProvider>
               <AppSidebar />
 
-              <div className='absolute left-full ml-2'>
+              <div className='fixed top-2 left-2'>
                 <SidebarTrigger />
               </div>
             </SidebarProvider>

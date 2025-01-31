@@ -1,7 +1,8 @@
-import { Home, LogOut, PieChart, Settings } from 'lucide-react'
+import { Home, LogOut, PieChart /*, Settings */ } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -18,6 +19,24 @@ type MenuItem = {
   onClick?: () => void
 }
 
+function AppSidebarMenuItem(item: MenuItem) {
+  const Tag = item.url ? Link : 'button'
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <Tag
+          to={item.url}
+          onClick={item.onClick}
+        >
+          <item.icon />
+          <span>{item.title}</span>
+        </Tag>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
 export function AppSidebar() {
   const { logout } = useAuth()
 
@@ -32,18 +51,11 @@ export function AppSidebar() {
       url: '/stats',
       icon: PieChart,
     },
-    {
-      title: 'Settings',
-      url: '/settings',
-      icon: Settings,
-    },
-    {
-      title: 'Logout',
-      onClick: () => {
-        logout.mutate()
-      },
-      icon: LogOut,
-    },
+    //{
+    //  title: 'Settings',
+    //  url: '/settings',
+    //  icon: Settings,
+    //},
   ]
 
   return (
@@ -55,27 +67,26 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => {
-                const Tag = item.url ? Link : 'button'
-
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <Tag
-                        to={item.url}
-                        onClick={item.onClick}
-                      >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Tag>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              })}
+              {items.map((item) => (
+                <AppSidebarMenuItem
+                  key={item.title}
+                  {...item}
+                />
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter>
+        <SidebarMenu>
+          <AppSidebarMenuItem
+            title='Logout'
+            onClick={() => logout.mutate()}
+            icon={LogOut}
+          />
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
 }
