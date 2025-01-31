@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { Link } from '@tanstack/react-router'
 import { useAuth } from '~/stores/session'
@@ -39,17 +40,21 @@ function AppSidebarMenuItem(item: MenuItem) {
 
 export function AppSidebar() {
   const { logout } = useAuth()
+  const { setOpenMobile } = useSidebar()
+  const defaultOnClick = () => setOpenMobile(false)
 
   const items: MenuItem[] = [
     {
       title: 'Home',
       url: '/',
       icon: Home,
+      onClick: defaultOnClick,
     },
     {
       title: 'Stats',
       url: '/stats',
       icon: PieChart,
+      onClick: defaultOnClick,
     },
     //{
     //  title: 'Settings',
