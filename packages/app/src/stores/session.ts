@@ -41,14 +41,15 @@ const createPb = () => {
   const pb = new PocketBase(config.authUrl) as TypedPocketBase
 
   /**
-   * When pb store changes, update ours
+   * When pb store changes, update ours.
+   * By passing `true` as the second argument, we make sure that the callback is fired immediately.
    */
   pb.authStore.onChange(() => {
     const user = isLoggedIn(pb)
       ? (pb.authStore.record as SafeAuthRecord)
       : undefined
 
-    useAuthStore.setState({ user, authReady: true })
+    useAuthStore.setState({ user })
   }, true)
 
   return pb
@@ -102,21 +103,23 @@ export const useAuth = () => {
 }
 
 /**
- * Makes sure that auth is ready by checking that the store has changed once
+ * Makes sure that auth is ready which is required for protecting routes
  */
 export const ensureAuthReady = async (): Promise<SafeAuthRecord> => {
   const state = () => useAuthStore.getState()
 
-  // auth is ready
-  if (state().authReady === true) return state().user
+  if (!state().user) return null
+  if (!pb.authStore.isValid) return null
 
-  // auth is not ready but there is a record in store, try to refresh it
-  if (pb.authStore.record) {
+  try {
     await pb.collection('users').authRefresh()
+  } catch (_e) {
+    // failed to refresh token
+    pb.authStore.clear()
   }
 
-  // auth is ready
   useAuthStore.setState({ authReady: true })
+
   return state().user
 }
 
