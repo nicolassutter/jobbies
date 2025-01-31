@@ -3,10 +3,8 @@ import { useMutation } from '@tanstack/react-query'
 import {
   getRouteApi,
   redirect,
-  RouteApi,
   useNavigate,
   useSearch,
-  type RouteById,
 } from '@tanstack/react-router'
 import { config } from '~/utils/config'
 import type { OmitIndexSignature } from 'type-fest'
@@ -95,6 +93,9 @@ export const useAuth = () => {
       return result.record
     },
     async onSuccess() {
+      // when a user logs in we create a random UUID for them, used for demo user access
+      if (!localStorage.getItem('userRandomUUID'))
+        localStorage.setItem('userRandomUUID', crypto.randomUUID())
       navigate({ to: searchParams.redirect ?? '/' })
     },
   })

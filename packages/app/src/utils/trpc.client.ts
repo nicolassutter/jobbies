@@ -22,6 +22,8 @@ const createTRPCClient = () =>
         async headers() {
           return {
             'X-PB-AUTH': getCookie(),
+            'X-PB-DEMO-USER-ID':
+              localStorage.getItem('userRandomUUID') ?? undefined,
           }
         },
       }),

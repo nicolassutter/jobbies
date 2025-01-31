@@ -1,6 +1,7 @@
 import Pocketbase from 'pocketbase'
 import { type FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
 import { env } from '../utils/env'
+import { z } from 'zod'
 
 export async function createContext({
   req,
@@ -22,7 +23,13 @@ export async function createContext({
   }
 
   const userId = pb.authStore.record?.id
-  const user = userId ? { id: userId } : null
+  const email = z
+    .string()
+    .nullable()
+    .catch(null)
+    .parse(pb.authStore.record?.email)
+
+  const user = userId ? { id: userId, email } : null
 
   return { req, resHeaders, user }
 }
