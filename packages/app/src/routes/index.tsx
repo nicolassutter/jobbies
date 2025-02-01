@@ -6,6 +6,7 @@ import {
   ApplicationEditionModal,
 } from '~/components/Application'
 import { trpc } from '~/utils/trpc.client'
+import { ButtonLoader } from '~/components/Loaders'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -21,13 +22,19 @@ function HomeComponent() {
   return (
     <main className='p-4 w-full'>
       <div className='grid justify-start gap-4 pt-10'>
-        <ApplicationDeletionModal />
-
         <h1 className='h1'>Welcome {user?.name}</h1>
 
-        <div className='flex'>
-          <ApplicationEditionModal trigger={true} />
-        </div>
+        {applicationsQuery.isPending ? (
+          <ButtonLoader />
+        ) : (
+          <>
+            <ApplicationDeletionModal />
+
+            <div className='flex'>
+              <ApplicationEditionModal trigger={true} />
+            </div>
+          </>
+        )}
       </div>
 
       <div className='grid gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mt-6'>
