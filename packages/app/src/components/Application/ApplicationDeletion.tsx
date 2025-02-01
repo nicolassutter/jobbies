@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { create } from 'zustand'
-import { ButtonLoader } from '../Loaders'
+import { SpinLoader } from '../Loaders'
 import { combine } from 'zustand/middleware'
 import { trpc } from '~/utils/trpc.client'
 
@@ -78,7 +78,7 @@ export const ApplicationDeletionModal: FunctionComponent = () => {
             }}
           >
             Delete
-            {deleteMutation.isPending && <ButtonLoader />}
+            {deleteMutation.isPending && <SpinLoader />}
           </Button>
         </DialogFooter>
       </DialogContent>

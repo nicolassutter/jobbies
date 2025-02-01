@@ -6,7 +6,7 @@ import {
   ApplicationEditionModal,
 } from '~/components/Application'
 import { trpc } from '~/utils/trpc.client'
-import { ButtonLoader } from '~/components/Loaders'
+import { SpinLoader } from '~/components/Loaders'
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
@@ -25,7 +25,7 @@ function HomeComponent() {
         <h1 className='h1'>Welcome {user?.name}</h1>
 
         {applicationsQuery.isPending ? (
-          <ButtonLoader />
+          <SpinLoader />
         ) : (
           <>
             <ApplicationDeletionModal />

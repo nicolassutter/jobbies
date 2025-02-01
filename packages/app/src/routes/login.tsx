@@ -20,7 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from '~/components/ui/card'
-import { ButtonLoader } from '~/components/Loaders'
+import { SpinLoader } from '~/components/Loaders'
 
 const searchSchema = z.object({
   // optional query param to redirect to after login
@@ -116,7 +116,7 @@ function LoginComponent() {
               disabled={loginMutation.isPending}
             >
               Sign-in
-              {loginMutation.isPending && <ButtonLoader />}
+              {loginMutation.isPending && <SpinLoader />}
             </Button>
           </CardFooter>
         </Card>

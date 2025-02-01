@@ -28,7 +28,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/textarea'
-import { ButtonLoader } from '../Loaders'
+import { SpinLoader } from '../Loaders'
 import { type FunctionComponent, useEffect, useRef } from 'react'
 import { create } from 'zustand'
 import { combine } from 'zustand/middleware'
@@ -294,7 +294,7 @@ export const ApplicationEditionModal: FunctionComponent<{
 
               <Button type='submit'>
                 Save changes
-                {isPending && <ButtonLoader />}
+                {isPending && <SpinLoader />}
               </Button>
             </DialogFooter>
           </form>
