@@ -114,7 +114,6 @@ export const ensureAuthReady = async (): Promise<SafeAuthRecord> => {
   const state = () => useAuthStore.getState()
 
   if (!state().user) return null
-  if (!pb.authStore.isValid) return null
 
   try {
     await pb.collection('users').authRefresh()
