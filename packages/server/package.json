@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "typecheck": "tsc",
     "dev": "NODE_ENV=development listhen --port 8888 -w src/index.ts",
     "ensure-database": "touch data/api.db",
     "migrations:push": "drizzle-kit push",
@@ -15,6 +16,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.10.10",
+    "type-fest": "^4.33.0",
+    "type-testing": "^0.2.0",
     "typescript": "^5.7.2"
   },
   "exports": {
