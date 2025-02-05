@@ -8,4 +8,4 @@ RUN pnpm install --frozen-lockfile --prod
 # RUN pnpm build --filter=@internal/server
 EXPOSE 8888
 # mount /usr/src/app/packages/server/data to a volume to persist data
-CMD [ "pnpm", "--filter", "@internal/server", "railway:start" ]
+CMD [ "pnpm", "--filter", "@internal/server", "start:prod" ]

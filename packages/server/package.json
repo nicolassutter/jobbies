@@ -9,7 +9,7 @@
     "ensure-database": "touch data/api.db",
     "migrations:push": "drizzle-kit push",
     "start": "NODE_ENV=production listhen --port 8888 src/index.ts",
-    "railway:start": "pnpm run ensure-database && pnpm run migrations:push && pnpm run start"
+    "start:prod": "pnpm run ensure-database && pnpm run migrations:push && pnpm run start"
   },
   "keywords": [],
   "author": "",
