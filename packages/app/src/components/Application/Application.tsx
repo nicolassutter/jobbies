@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { Edit, Edit2, Trash } from 'lucide-react'
+import { Edit, Edit2, ExternalLink, Trash } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { capitalize } from '~/lib/utils'
 import {
@@ -50,6 +50,22 @@ export const Application: FunctionComponent<{
           <div className='flex gap-2 justify-between'>
             <CardTitle>
               <h2>{application.jobTitle}</h2>
+              {application.url && (
+                <Button
+                  variant={'link'}
+                  className='px-0 mt-1'
+                  asChild
+                >
+                  <a
+                    href={application.url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Open
+                    <ExternalLink />
+                  </a>
+                </Button>
+              )}
             </CardTitle>
 
             <DropdownMenu>
